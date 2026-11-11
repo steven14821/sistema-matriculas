@@ -70,6 +70,20 @@ La entidad central **`matriculas`** resuelve la relación de muchos a muchos ent
 
 ## ⚡ Guía de Instalación y Reconstrucción del Proyecto
 
+### Perfiles y acceso de demostración
+
+El sistema incluye los roles **Administrador**, **Funcionario** y **Estudiante**. El administrador puede crear, consultar, editar y eliminar usuarios desde su panel; cada perfil autenticado ve su propio panel. Los usuarios de demostración se crean únicamente en entornos `local` y `testing` al ejecutar `php artisan migrate --seed`:
+
+| Rol | Correo | Contraseña |
+| :--- | :--- | :--- |
+| Administrador | `admin@matriculas.test` | `Matriculas2026!` |
+| Funcionario | `funcionario@matriculas.test` | `Matriculas2026!` |
+| Estudiante | `estudiante@matriculas.test` | `Matriculas2026!` |
+
+Estas credenciales son solo para desarrollo local y no se crean en producción.
+
+El seeder también carga un programa, dos asignaturas, el periodo `2026-2`, un perfil estudiantil y dos grupos con sus matrículas de demostración. En producción, `php artisan migrate` crea el esquema; los datos de demostración solo se cargan en entornos `local` y `testing`.
+
 Cuando descargas o clonas este repositorio, notarás que faltan dos carpetas pesadas: `vendor/` y `node_modules/`. Esto es una práctica estándar en la ingeniería de software para mantener el repositorio liviano y seguro.
 
 ### ❓ ¿Por qué no están en el repositorio?
