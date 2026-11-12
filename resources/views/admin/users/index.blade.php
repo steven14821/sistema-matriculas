@@ -5,8 +5,7 @@
 @section('content')
     <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
-            <p class="text-sm font-semibold text-indigo-700">Administración</p>
-            <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950">Usuarios</h1>
+            <h1 class="text-3xl font-semibold tracking-tight text-slate-950">Usuarios</h1>
             <p class="mt-3 text-sm leading-6 text-slate-600">Crea cuentas y administra los perfiles de acceso al sistema.</p>
         </div>
         <a href="{{ route('admin.users.create') }}" class="inline-flex items-center justify-center rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-800">
@@ -40,7 +39,7 @@
 
     <div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200 text-left">
+            <table class="academic-table min-w-full divide-y divide-slate-200 text-left">
                 <thead class="bg-slate-50">
                     <tr>
                         <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Usuario</th>

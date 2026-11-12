@@ -4,50 +4,113 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
-    <title>@yield('title', 'Sistema de Matrículas') | Saint Victoria Academy</title>
+    <title>@yield('title', 'Panel') | Saint Victoria Academy</title>
+    @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-    <header class="border-b border-slate-200 bg-white/90 shadow-sm shadow-slate-900/5 backdrop-blur">
-        <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="Saint Victoria Academy" class="size-12 rounded-xl object-cover shadow-sm ring-1 ring-slate-200">
-                <span>
-                    <span class="block font-serif text-base font-semibold tracking-wide text-slate-950">Saint Victoria Academy</span>
-                    <span class="block text-xs font-medium uppercase tracking-[0.16em] text-slate-500">Sistema de matrículas</span>
+<body class="academic-app min-h-screen bg-slate-50 text-slate-900 antialiased">
+    @php
+        $user = auth()->user();
+        $navigation = $user->role->value === 'administrador'
+            ? [
+                ['Panel', 'dashboard', 'dashboard'],
+                ['Usuarios', 'admin.users.index', 'admin.users.*'],
+                ['Matrículas', 'admin.matriculas.index', 'admin.matriculas.*'],
+                ['Programas', 'admin.programas.index', 'admin.programas.*'],
+                ['Asignaturas', 'admin.asignaturas.index', 'admin.asignaturas.*'],
+                ['Periodos', 'admin.periodos.index', 'admin.periodos.*'],
+                ['Grupos', 'admin.grupos.index', 'admin.grupos.*'],
+                ['Profesores', 'admin.profesores.index', 'admin.profesores.*'],
+            ]
+            : ($user->role->value === 'funcionario'
+                ? [
+                    ['Panel', 'dashboard', 'dashboard'],
+                    ['Matrículas', 'admin.matriculas.index', 'admin.matriculas.*'],
+                    ['Grupos', 'admin.grupos.index', 'admin.grupos.*'],
+                    ['Profesores', 'admin.profesores.index', 'admin.profesores.*'],
+                    ['Oferta académica', 'oferta.index', 'oferta.*'],
+                ]
+                : [
+                    ['Panel', 'dashboard', 'dashboard'],
+                    ['Oferta académica', 'oferta.index', 'oferta.*'],
+                    ['Mi matrícula', 'matriculas.mine', 'matriculas.mine'],
+                ]);
+    @endphp
+
+    <div class="academic-shell min-h-screen">
+        <aside class="academic-sidebar">
+            <a href="{{ route('dashboard') }}" class="academic-brand">
+                <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="" class="academic-brand__seal">
+                <span class="min-w-0">
+                    <span class="academic-brand__name">Saint Victoria</span>
+                    <span class="academic-brand__sub">Academy · Matrículas</span>
                 </span>
             </a>
 
-            @auth
-                <nav aria-label="Navegación principal" class="flex flex-wrap items-center gap-3 sm:gap-5">
-                    @can('manage-users')
-                        <a href="{{ route('admin.users.index') }}" class="text-sm font-medium text-slate-600 transition hover:text-indigo-700">
-                            Usuarios
-                        </a>
-                    @endcan
-                    <span class="hidden text-sm text-slate-600 sm:inline">{{ auth()->user()->name }}</span>
-                    <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
-                        {{ auth()->user()->role->label() }}
+            <div class="academic-sidebar__label">Espacio académico</div>
+            <nav class="academic-nav" aria-label="Navegación principal">
+                @foreach ($navigation as [$label, $routeName, $activeRoute])
+                    <a href="{{ route($routeName) }}" @if (request()->routeIs($activeRoute)) aria-current="page" @endif>
+                        <span class="academic-nav__mark" aria-hidden="true"></span>
+                        <span>{{ $label }}</span>
+                    </a>
+                @endforeach
+            </nav>
+
+            <div class="academic-sidebar__foot">
+                <span class="academic-sidebar__foot-rule" aria-hidden="true"></span>
+                <span>Saint Victoria Academy</span>
+                <span>Gestión académica</span>
+            </div>
+        </aside>
+
+        <div class="academic-workspace">
+            <header class="academic-topbar">
+                <div class="academic-topbar__context">
+                    <span class="academic-topbar__eyebrow">Sistema institucional</span>
+                    <span class="academic-topbar__divider" aria-hidden="true"></span>
+                    <span class="academic-topbar__current">@yield('title', 'Panel')</span>
+                </div>
+                <div class="academic-account">
+                    <span class="academic-account__initial" aria-hidden="true">{{ mb_substr($user->name, 0, 1) }}</span>
+                    <span class="academic-account__identity">
+                        <span class="academic-account__name">{{ $user->name }}</span>
+                        <span class="academic-account__role">{{ ucfirst($user->role->value) }}</span>
                     </span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">
-                            Cerrar sesión
-                        </button>
+                        <button class="academic-account__logout" type="submit">Salir</button>
                     </form>
-                </nav>
-            @endauth
+                </div>
+            </header>
+
+            <nav class="academic-mobile-nav" aria-label="Navegación principal">
+                <a href="{{ route('dashboard') }}" class="academic-mobile-nav__brand">
+                    <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="" class="academic-mobile-nav__seal">
+                    <span>Saint Victoria</span>
+                </a>
+                @foreach ($navigation as [$label, $routeName, $activeRoute])
+                    <a href="{{ route($routeName) }}" @if (request()->routeIs($activeRoute)) aria-current="page" @endif>{{ $label }}</a>
+                @endforeach
+            </nav>
+
+            <main class="academic-main">
+                @if (session('status'))
+                    <div class="academic-notice" role="status">{{ session('status') }}</div>
+                @endif
+                @if ($errors->any())
+                    <div class="academic-notice academic-notice--error" role="alert">
+                        <p class="font-semibold">Revisa la información ingresada.</p>
+                        <ul class="mt-2 list-inside list-disc">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @yield('content')
+            </main>
         </div>
-    </header>
-
-    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        @if (session('status'))
-            <div class="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800" role="status">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        @yield('content')
-    </main>
+    </div>
 </body>
 </html>

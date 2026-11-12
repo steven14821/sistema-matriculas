@@ -33,6 +33,7 @@ Un prototipo web robusto desarrollado en **Laravel** bajo la arquitectura **Mode
 | **RF-18 - RF-19** | Inscripción y asignación manual de asignaturas y grupos a estudiantes. | Admin, Funcionario |
 | **RF-20 - RF-21** | Autogestión de matrícula y selección de grupos según cupo disponible. | Estudiante |
 | **RF-22 - RF-23** | Búsqueda avanzada y filtrado de matrículas por periodo/estudiante. | Admin, Funcionario |
+| **RF-24** | Gestión del catálogo de profesores y asignación a grupos identificados por código. | Admin, Funcionario |
 
 ### 🔒 Requerimientos No Funcionales (RNF)
 
@@ -63,8 +64,11 @@ La entidad central **`matriculas`** resuelve la relación de muchos a muchos ent
 * **`programas`**: `id`, `nombre`, `nivel`
 * **`asignaturas`**: `id`, `programa_id`, `codigo`, `nombre`, `creditos`
 * **`periodos`**: `id`, `nombre`, `fecha_inicio`, `fecha_fin`, `abierto`
-* **`grupos`**: `id`, `asignatura_id`, `periodo_id`, `docente`, `horario`, `cupo`
+* **`profesores`**: `id`, `nombre`
+* **`grupos`**: `id`, `codigo`, `asignatura_id`, `periodo_id`, `profesor_id`, `cupo`
 * **`matriculas`**: `id`, `estudiante_id`, `grupo_id`, `estado`, `fecha`
+
+Una asignatura puede tener varios grupos en el mismo periodo. Cada grupo se identifica con un código como `A101`; el código debe ser único dentro de su asignatura y periodo. Los funcionarios administran el catálogo independiente de profesores y los asignan a los grupos. La matrícula no guarda ni muestra horarios.
 
 ---
 

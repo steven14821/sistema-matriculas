@@ -8,8 +8,7 @@
     <div class="mx-auto max-w-2xl">
         <a href="{{ route('admin.users.index') }}" class="text-sm font-semibold text-indigo-700 hover:text-indigo-900">← Volver a usuarios</a>
         <div class="mt-5">
-            <p class="text-sm font-semibold text-indigo-700">Administración</p>
-            <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{{ $isEditing ? 'Editar usuario' : 'Crear usuario' }}</h1>
+            <h1 class="text-3xl font-semibold tracking-tight text-slate-950">{{ $isEditing ? 'Editar usuario' : 'Crear usuario' }}</h1>
             <p class="mt-3 text-sm leading-6 text-slate-600">
                 {{ $isEditing ? 'Actualiza los datos y el perfil de acceso.' : 'Completa los datos y asigna un perfil de acceso.' }}
             </p>

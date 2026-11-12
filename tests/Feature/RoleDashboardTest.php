@@ -15,9 +15,9 @@ class RoleDashboardTest extends TestCase
     public static function rolesAndDashboardViews(): array
     {
         return [
-            'administrator' => [UserRole::Administrador, 'dashboard.administrador', 'Panel de administración'],
-            'staff member' => [UserRole::Funcionario, 'dashboard.funcionario', 'Panel del funcionario'],
-            'student' => [UserRole::Estudiante, 'dashboard.estudiante', 'Panel del estudiante'],
+            'administrator' => [UserRole::Administrador, 'dashboard.administrador', 'Administración académica'],
+            'staff member' => [UserRole::Funcionario, 'dashboard.funcionario', 'Gestión académica'],
+            'student' => [UserRole::Estudiante, 'dashboard.estudiante', 'Tu próximo periodo empieza aquí.'],
         ];
     }
 
@@ -43,14 +43,28 @@ class RoleDashboardTest extends TestCase
         $this->get(route('dashboard'))->assertRedirect(route('login'));
     }
 
-    public function test_dashboard_guest_page_explains_the_three_profiles(): void
+    public function test_functionary_dashboard_links_to_group_assignment_and_professor_catalog(): void
+    {
+        $staffMember = User::factory()->create(['role' => UserRole::Funcionario]);
+
+        $this->withoutVite()
+            ->actingAs($staffMember)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee(route('admin.grupos.index'))
+            ->assertSee(route('admin.profesores.index'))
+            ->assertSee(route('admin.matriculas.index'));
+    }
+
+    public function test_dashboard_guest_page_explains_the_enrollment_flow_and_links_to_login(): void
     {
         $response = $this->withoutVite()->get(route('home'));
 
         $response->assertOk()
-            ->assertSee('Administración')
-            ->assertSee('Funcionario')
-            ->assertSee('Estudiante')
+            ->assertSee('Tu recorrido académico, en orden.')
+            ->assertSee('Oferta')
+            ->assertSee('Matrícula')
+            ->assertSee('Seguimiento')
             ->assertSee(route('login'));
     }
 }

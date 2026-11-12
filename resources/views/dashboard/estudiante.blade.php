@@ -1,37 +1,58 @@
 @extends('layouts.app')
 
-@section('title', 'Panel del estudiante')
+@section('title', 'Inicio')
 
 @section('content')
-    <div>
-        <p class="text-sm font-semibold text-indigo-700">Tu espacio académico</p>
-        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950">Panel del estudiante</h1>
-        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-            Consulta la oferta académica y gestiona tu matrícula desde un mismo lugar.
+    <header class="max-w-3xl">
+        <h1 class="text-4xl font-medium text-slate-950 sm:text-5xl">Tu próximo periodo empieza aquí.</h1>
+        <p class="mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+            Bienvenido, {{ auth()->user()->name }}. Sigue estos pasos para revisar los grupos disponibles y mantener tu información académica al día.
         </p>
-    </div>
+    </header>
 
-    <section class="mt-9 grid gap-5 md:grid-cols-2" aria-label="Herramientas del estudiante">
-        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <span class="flex size-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700" aria-hidden="true">
-                <svg class="size-5" viewBox="0 0 24 24" fill="none">
-                    <path d="m3 9 9-5 9 5-9 5-9-5ZM7 11.2v4.3c2.8 2.2 7.2 2.2 10 0v-4.3M21 9v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <h2 class="mt-5 text-lg font-semibold text-slate-950">Oferta de grupos</h2>
-            <p class="mt-2 text-sm leading-6 text-slate-600">Explora asignaturas, horarios y cupos disponibles para el periodo académico.</p>
-            <span class="mt-5 inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Módulo en preparación</span>
-        </article>
+    <section class="mt-12 border-y border-slate-300 bg-white/70 px-5 py-7 sm:px-8 sm:py-9" aria-labelledby="enrollment-route-title">
+        <div class="flex flex-col justify-between gap-3 border-b border-slate-200 pb-5 sm:flex-row sm:items-end">
+            <div>
+                <h2 id="enrollment-route-title" class="text-2xl font-medium text-slate-950">Ruta de matrícula</h2>
+                <p class="mt-2 text-sm text-slate-600">Una guía breve para completar tu inscripción.</p>
+            </div>
+        </div>
 
-        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <span class="flex size-11 items-center justify-center rounded-xl bg-cyan-50 text-cyan-800" aria-hidden="true">
-                <svg class="size-5" viewBox="0 0 24 24" fill="none">
-                    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </span>
-            <h2 class="mt-5 text-lg font-semibold text-slate-950">Mi matrícula</h2>
-            <p class="mt-2 text-sm leading-6 text-slate-600">Selecciona grupos según su disponibilidad y revisa el estado de tu inscripción.</p>
-            <span class="mt-5 inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Módulo en preparación</span>
-        </article>
+        <ol class="grid gap-0 pt-3 md:grid-cols-3">
+            <li class="relative border-b border-slate-200 py-6 md:border-b-0 md:pr-7">
+                <span class="font-serif text-sm text-amber-800">01</span>
+                <h3 class="mt-3 text-lg font-semibold text-slate-950">Explora la oferta</h3>
+                <p class="mt-2 max-w-xs text-sm leading-6 text-slate-600">Consulta asignaturas, profesores y cupos abiertos.</p>
+                <a href="{{ route('oferta.index') }}" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 hover:text-indigo-900">
+                    Ver grupos disponibles <span aria-hidden="true">→</span>
+                </a>
+            </li>
+            <li class="relative border-b border-slate-200 py-6 md:border-b-0 md:border-l md:border-slate-200 md:px-7">
+                <span class="font-serif text-sm text-amber-800">02</span>
+                <h3 class="mt-3 text-lg font-semibold text-slate-950">Elige tus grupos</h3>
+                <p class="mt-2 max-w-xs text-sm leading-6 text-slate-600">Inscríbete en los grupos que tengan disponibilidad.</p>
+                <a href="{{ route('oferta.index') }}" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 hover:text-indigo-900">
+                    Revisar disponibilidad <span aria-hidden="true">→</span>
+                </a>
+            </li>
+            <li class="py-6 md:border-l md:border-slate-200 md:pl-7">
+                <span class="font-serif text-sm text-amber-800">03</span>
+                <h3 class="mt-3 text-lg font-semibold text-slate-950">Confirma tu matrícula</h3>
+                <p class="mt-2 max-w-xs text-sm leading-6 text-slate-600">Consulta los grupos en los que quedaste inscrito.</p>
+                <a href="{{ route('matriculas.mine') }}" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 hover:text-indigo-900">
+                    Ver mi matrícula <span aria-hidden="true">→</span>
+                </a>
+            </li>
+        </ol>
+    </section>
+
+    <section class="mt-9 flex flex-col justify-between gap-5 border-t-2 border-amber-700 bg-amber-50/70 px-5 py-5 sm:flex-row sm:items-center sm:px-7" aria-label="Acceso a la oferta académica">
+        <div>
+            <h2 class="text-xl font-medium text-slate-950">¿Listo para comenzar?</h2>
+            <p class="mt-1 text-sm text-slate-600">Revisa la oferta académica disponible para matrícula.</p>
+        </div>
+        <a href="{{ route('oferta.index') }}" class="inline-flex w-fit items-center gap-3 bg-indigo-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-800">
+            Consultar oferta <span aria-hidden="true">→</span>
+        </a>
     </section>
 @endsection
