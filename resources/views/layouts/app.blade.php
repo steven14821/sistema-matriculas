@@ -4,22 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
-    <title>@yield('title', 'Sistema de Matrículas') | Sistema de Matrículas</title>
+    <title>@yield('title', 'Sistema de Matrículas') | Saint Victoria Academy</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-    <header class="border-b border-slate-200 bg-white">
+    <header class="border-b border-slate-200 bg-white/90 shadow-sm shadow-slate-900/5 backdrop-blur">
         <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
             <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                <span class="flex size-10 items-center justify-center rounded-xl bg-indigo-950 text-cyan-200" aria-hidden="true">
-                    <svg class="size-6" viewBox="0 0 24 24" fill="none">
-                        <path d="m3 9 9-5 9 5-9 5-9-5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-                        <path d="M7 11.2v4.3c2.8 2.2 7.2 2.2 10 0v-4.3M21 9v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </span>
+                <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="Saint Victoria Academy" class="size-12 rounded-xl object-cover shadow-sm ring-1 ring-slate-200">
                 <span>
-                    <span class="block text-sm font-semibold">Sistema de Matrículas</span>
-                    <span class="block text-xs text-slate-500">Gestión académica</span>
+                    <span class="block font-serif text-base font-semibold tracking-wide text-slate-950">Saint Victoria Academy</span>
+                    <span class="block text-xs font-medium uppercase tracking-[0.16em] text-slate-500">Sistema de matrículas</span>
                 </span>
             </a>
 
