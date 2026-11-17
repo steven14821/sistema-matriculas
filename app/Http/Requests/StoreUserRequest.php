@@ -28,6 +28,9 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', Rule::enum(UserRole::class)],
+            'codigo' => ['exclude_unless:role,estudiante', 'required', 'string', 'max:255', Rule::unique('estudiantes', 'codigo')],
+            'documento' => ['exclude_unless:role,estudiante', 'required', 'string', 'max:255', Rule::unique('estudiantes', 'documento')],
+            'programa_id' => ['exclude_unless:role,estudiante', 'required', 'integer', Rule::exists('programas', 'id')],
         ];
     }
 }

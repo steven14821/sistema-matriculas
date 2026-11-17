@@ -20,9 +20,27 @@
 
             @auth
                 <nav aria-label="Navegación principal" class="flex flex-wrap items-center gap-3 sm:gap-5">
+                    @can('self-enroll')
+                        <a href="{{ route('student.enrollments.index') }}" class="text-sm font-medium text-slate-600 transition hover:text-indigo-700">
+                            Oferta y matrícula
+                        </a>
+                    @endcan
+                    @can('manage-enrollments')
+                        <a href="{{ route('staff.enrollments.index') }}" class="text-sm font-medium text-slate-600 transition hover:text-indigo-700">
+                            Matrículas
+                        </a>
+                    @endcan
+                    @can('manage-academic')
+                        <a href="{{ route('staff.programas.index') }}" class="text-sm font-medium text-slate-600 transition hover:text-indigo-700">
+                            Oferta académica
+                        </a>
+                    @endcan
                     @can('manage-users')
                         <a href="{{ route('admin.users.index') }}" class="text-sm font-medium text-slate-600 transition hover:text-indigo-700">
                             Usuarios
+                        </a>
+                        <a href="{{ route('admin.estudiantes.index') }}" class="text-sm font-medium text-slate-600 transition hover:text-indigo-700">
+                            Estudiantes
                         </a>
                     @endcan
                     <span class="hidden text-sm text-slate-600 sm:inline">{{ auth()->user()->name }}</span>

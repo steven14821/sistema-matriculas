@@ -89,11 +89,13 @@ class DatabaseSeeder extends Seeder
         foreach ([
             [
                 'asignatura' => $programacion,
+                'codigo' => 'SIS101-01',
                 'docente' => 'Laura Gómez',
                 'horario' => 'Lunes y miércoles, 08:00-10:00',
             ],
             [
                 'asignatura' => $basesDeDatos,
+                'codigo' => 'SIS201-01',
                 'docente' => 'Carlos Rodríguez',
                 'horario' => 'Martes y jueves, 10:00-12:00',
             ],
@@ -106,6 +108,7 @@ class DatabaseSeeder extends Seeder
                 ],
                 [
                     'docente' => $groupData['docente'],
+                    'codigo' => $groupData['codigo'],
                     'cupo' => 30,
                 ],
             );

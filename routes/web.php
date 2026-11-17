@@ -1,7 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\AcademicOverviewController;
+use App\Http\Controllers\Admin\StudentOverviewController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Staff\AsignaturaController;
+use App\Http\Controllers\Staff\EnrollmentController as StaffEnrollmentController;
+use App\Http\Controllers\Staff\GrupoController;
+use App\Http\Controllers\Staff\PeriodoController;
+use App\Http\Controllers\Staff\ProgramaController;
+use App\Http\Controllers\Student\EnrollmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'landing')->name('home');
@@ -10,9 +18,38 @@ Route::get('/dashboard', DashboardController::class)
     ->middleware('auth')
     ->name('dashboard');
 
+Route::middleware(['auth', 'can:self-enroll'])
+    ->prefix('student')
+    ->name('student.')
+    ->group(function (): void {
+        Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
+        Route::post('/groups/{grupo}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
+    });
+
 Route::middleware(['auth', 'can:manage-users'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function (): void {
-        Route::resource('users', UserController::class)->except('show');
+        Route::resource('users', UserController::class)->only(['index', 'create', 'store']);
+        Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.role.update');
+        Route::get('/estudiantes', [StudentOverviewController::class, 'index'])->name('estudiantes.index');
+        Route::get('/estudiantes/{estudiante}', [StudentOverviewController::class, 'show'])->name('estudiantes.show');
+        Route::get('/catalogo', [AcademicOverviewController::class, 'index'])->name('catalogo.index');
+    });
+
+Route::middleware(['auth', 'can:manage-academic'])
+    ->prefix('staff')
+    ->name('staff.')
+    ->group(function (): void {
+        Route::resource('programas', ProgramaController::class)->except('show');
+        Route::resource('asignaturas', AsignaturaController::class)->except('show');
+        Route::resource('periodos', PeriodoController::class)->except('show');
+        Route::resource('grupos', GrupoController::class)->except('show');
+    });
+
+Route::middleware(['auth', 'can:manage-enrollments'])
+    ->prefix('staff')
+    ->name('staff.')
+    ->group(function (): void {
+        Route::resource('enrollments', StaffEnrollmentController::class)->only(['index', 'create', 'store', 'destroy']);
     });

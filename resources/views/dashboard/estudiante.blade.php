@@ -20,7 +20,9 @@
             </span>
             <h2 class="mt-5 text-lg font-semibold text-slate-950">Oferta de grupos</h2>
             <p class="mt-2 text-sm leading-6 text-slate-600">Explora asignaturas, horarios y cupos disponibles para el periodo académico.</p>
-            <span class="mt-5 inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Módulo en preparación</span>
+            <a href="{{ route('student.enrollments.index') }}#oferta" class="mt-5 inline-flex text-sm font-semibold text-indigo-700 hover:text-indigo-900">
+                Consultar oferta <span class="ml-2" aria-hidden="true">→</span>
+            </a>
         </article>
 
         <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -31,7 +33,9 @@
             </span>
             <h2 class="mt-5 text-lg font-semibold text-slate-950">Mi matrícula</h2>
             <p class="mt-2 text-sm leading-6 text-slate-600">Selecciona grupos según su disponibilidad y revisa el estado de tu inscripción.</p>
-            <span class="mt-5 inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Módulo en preparación</span>
+            <a href="{{ route('student.enrollments.index') }}#mis-matriculas" class="mt-5 inline-flex text-sm font-semibold text-indigo-700 hover:text-indigo-900">
+                Ver mis matrículas <span class="ml-2" aria-hidden="true">→</span>
+            </a>
         </article>
     </section>
 @endsection

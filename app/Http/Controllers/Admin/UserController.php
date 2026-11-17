@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AssignUserRoleRequest;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Models\Programa;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -45,28 +48,30 @@ class UserController extends Controller
     {
         return view('admin.users.form', [
             'roles' => UserRole::cases(),
+            'programas' => Programa::query()->orderBy('nombre')->get(),
         ]);
     }
 
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        User::create($request->validated());
+        $validated = $request->validated();
+        $userAttributes = Arr::except($validated, ['codigo', 'documento', 'programa_id']);
+        $studentAttributes = Arr::only($validated, ['codigo', 'documento', 'programa_id']);
+
+        DB::transaction(function () use ($userAttributes, $studentAttributes): void {
+            $user = User::create($userAttributes);
+
+            if ($user->role === UserRole::Estudiante) {
+                $user->estudiante()->create($studentAttributes);
+            }
+        });
 
         return to_route('admin.users.index')->with('status', 'El usuario fue creado correctamente.');
     }
 
-    public function edit(User $user): View
+    public function updateRole(AssignUserRoleRequest $request, User $user): RedirectResponse
     {
-        return view('admin.users.form', [
-            'user' => $user,
-            'roles' => UserRole::cases(),
-        ]);
-    }
-
-    public function update(UpdateUserRequest $request, User $user): RedirectResponse
-    {
-        $validated = $request->validated();
-        $newRole = UserRole::from($validated['role']);
+        $newRole = UserRole::from($request->validated('role'));
 
         if ($user->is($request->user()) && $newRole !== UserRole::Administrador) {
             return back()
@@ -82,28 +87,15 @@ class UserController extends Controller
                 ->withInput();
         }
 
-        if (blank($validated['password'])) {
-            unset($validated['password']);
+        if ($newRole === UserRole::Estudiante && ! $user->estudiante()->exists()) {
+            return back()
+                ->withErrors(['role' => 'Para asignar el rol de estudiante, crea el usuario con sus datos académicos.'])
+                ->withInput();
         }
 
-        $user->update($validated);
+        $user->update(['role' => $newRole]);
 
-        return to_route('admin.users.index')->with('status', 'El usuario fue actualizado correctamente.');
-    }
-
-    public function destroy(Request $request, User $user): RedirectResponse
-    {
-        if ($user->role === UserRole::Administrador && ! $this->hasAnotherAdministrator($user)) {
-            return back()->withErrors(['user' => 'Debe existir al menos un administrador en el sistema.']);
-        }
-
-        if ($user->is($request->user())) {
-            return back()->withErrors(['user' => 'No puedes eliminar tu propia cuenta.']);
-        }
-
-        $user->delete();
-
-        return to_route('admin.users.index')->with('status', 'El usuario fue eliminado correctamente.');
+        return to_route('admin.users.index')->with('status', 'El rol del usuario fue actualizado correctamente.');
     }
 
     private function hasAnotherAdministrator(User $user): bool

@@ -7,14 +7,14 @@
         <div>
             <p class="text-sm font-semibold text-indigo-700">Administración</p>
             <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950">Usuarios</h1>
-            <p class="mt-3 text-sm leading-6 text-slate-600">Crea cuentas y administra los perfiles de acceso al sistema.</p>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Crea cuentas y asigna sus roles. La información de las cuentas existentes es de solo lectura, excepto el rol.</p>
         </div>
         <a href="{{ route('admin.users.create') }}" class="inline-flex items-center justify-center rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-800">
             Crear usuario
         </a>
     </div>
 
-    @error('user')
+    @error('role')
         <div class="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{{ $message }}</div>
     @enderror
 
@@ -46,7 +46,7 @@
                         <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Usuario</th>
                         <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Rol</th>
                         <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Creado</th>
-                        <th scope="col" class="px-5 py-4 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Acciones</th>
+                        <th scope="col" class="px-5 py-4 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Asignar rol</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -66,16 +66,17 @@
                             </td>
                             <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-500">{{ $user->created_at->format('d/m/Y') }}</td>
                             <td class="whitespace-nowrap px-5 py-4">
-                                <div class="flex justify-end gap-3">
-                                    <a href="{{ route('admin.users.edit', $user) }}" class="text-sm font-semibold text-indigo-700 hover:text-indigo-900">Editar</a>
-                                    @if (! $user->is(auth()->user()))
-                                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('¿Eliminar este usuario?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-sm font-semibold text-red-700 hover:text-red-900">Eliminar</button>
-                                        </form>
-                                    @endif
-                                </div>
+                                <form method="POST" action="{{ route('admin.users.role.update', $user) }}" class="flex justify-end gap-2">
+                                    @csrf
+                                    @method('PATCH')
+                                    <label for="role-{{ $user->id }}" class="sr-only">Rol de {{ $user->name }}</label>
+                                    <select id="role-{{ $user->id }}" name="role" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->value }}" @selected($user->role === $role)>{{ $role->label() }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-800">Guardar</button>
+                                </form>
                             </td>
                         </tr>
                     @empty

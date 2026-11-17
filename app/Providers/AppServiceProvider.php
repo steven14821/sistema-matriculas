@@ -26,5 +26,20 @@ class AppServiceProvider extends ServiceProvider
             'manage-users',
             fn (User $user): bool => $user->role === UserRole::Administrador,
         );
+
+        Gate::define(
+            'self-enroll',
+            fn (User $user): bool => $user->role === UserRole::Estudiante,
+        );
+
+        Gate::define(
+            'manage-enrollments',
+            fn (User $user): bool => $user->role === UserRole::Funcionario,
+        );
+
+        Gate::define(
+            'manage-academic',
+            fn (User $user): bool => $user->role === UserRole::Funcionario,
+        );
     }
 }
