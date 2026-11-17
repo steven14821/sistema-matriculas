@@ -110,7 +110,7 @@
                                         </td>
                                         <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-700">{{ $group->periodo->nombre }}</td>
                                         <td class="px-5 py-4 text-sm text-slate-700">
-                                            <span class="block">{{ $group->docente ?: 'Docente por definir' }}</span>
+                                            <span class="block">{{ $group->profesor?->nombre ?? $group->docente ?? 'Docente por definir' }}</span>
                                             <span class="mt-1 block text-slate-500">{{ $group->horario ?: 'Horario por definir' }}</span>
                                         </td>
                                         <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-700">

@@ -18,7 +18,7 @@ class AcademicOverviewController extends Controller
                 ->orderBy('nombre')
                 ->get(),
             'periodos' => Periodo::query()
-                ->with(['grupos' => fn ($query) => $query->with('asignatura')->orderBy('codigo')])
+                ->with(['grupos' => fn ($query) => $query->with(['asignatura', 'profesor'])->orderBy('codigo')])
                 ->orderByDesc('fecha_inicio')
                 ->get(),
         ]);

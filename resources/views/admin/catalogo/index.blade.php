@@ -60,7 +60,7 @@
                             <thead class="bg-slate-50">
                                 <tr>
                                     <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">Grupo y asignatura</th>
-                                    <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">Docente / horario</th>
+                                    <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">Profesor / horario</th>
                                     <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">Cupo</th>
                                 </tr>
                             </thead>
@@ -72,7 +72,7 @@
                                             <span class="text-slate-600">{{ $grupo->asignatura->nombre }}</span>
                                         </td>
                                         <td class="px-4 py-3 text-sm text-slate-700">
-                                            <span class="block">{{ $grupo->docente }}</span>
+                                            <span class="block">{{ $grupo->profesor?->nombre ?? $grupo->docente ?? 'Pendiente de asignación' }}</span>
                                             <span class="text-slate-500">{{ $grupo->horario }}</span>
                                         </td>
                                         <td class="px-4 py-3 text-sm text-slate-700">{{ $grupo->cupo }}</td>

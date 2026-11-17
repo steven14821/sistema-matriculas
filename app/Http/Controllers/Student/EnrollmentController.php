@@ -33,7 +33,7 @@ class EnrollmentController extends Controller
             $offeredGroups = Grupo::query()
                 ->whereIn('periodo_id', $openPeriods->modelKeys())
                 ->whereHas('asignatura', fn (Builder $query): Builder => $query->where('programa_id', $student->programa_id))
-                ->with(['asignatura', 'periodo'])
+                ->with(['asignatura', 'periodo', 'profesor'])
                 ->withCount([
                     'matriculas as matriculas_activas_count' => fn (Builder $query): Builder => $query->where('estado', 'activa'),
                 ])
@@ -45,7 +45,7 @@ class EnrollmentController extends Controller
             $enrollments = Matricula::query()
                 ->where('estudiante_id', $student->id)
                 ->where('estado', 'activa')
-                ->with(['grupo.asignatura', 'grupo.periodo'])
+                ->with(['grupo.asignatura', 'grupo.periodo', 'grupo.profesor'])
                 ->orderByDesc('fecha')
                 ->orderByDesc('id')
                 ->get();
@@ -80,5 +80,22 @@ class EnrollmentController extends Controller
 
         return to_route('student.enrollments.index')
             ->with('status', 'La matrícula se realizó correctamente.');
+    }
+
+    public function destroy(Request $request, Matricula $matricula): RedirectResponse
+    {
+        $student = $request->user()->estudiante;
+
+        abort_unless($student !== null && $matricula->estudiante_id === $student->id, 403);
+
+        if ($matricula->estado !== 'activa') {
+            return back()->withErrors([
+                'matricula' => 'Solo puedes cancelar una matrícula activa.',
+            ]);
+        }
+
+        $matricula->update(['estado' => 'cancelada']);
+
+        return to_route('matriculas.mine')->with('status', 'La matrícula fue cancelada correctamente.');
     }
 }

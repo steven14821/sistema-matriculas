@@ -51,6 +51,7 @@ class StudentOverviewController extends Controller
                         ->with([
                             'asignatura' => fn (Relation $query) => $query->withTrashed()->with('programa'),
                             'periodo' => fn (Relation $query) => $query->withTrashed(),
+                            'profesor',
                         ]),
                 ])
                 ->orderByDesc('fecha')

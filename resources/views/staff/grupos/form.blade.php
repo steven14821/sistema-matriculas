@@ -10,7 +10,9 @@
         <h1 class="mt-5 text-3xl font-semibold tracking-tight text-slate-950">{{ $isEditing ? 'Editar grupo' : 'Crear grupo' }}</h1>
         <form method="POST" action="{{ $isEditing ? route('staff.grupos.update', $grupo) : route('staff.grupos.store') }}" class="mt-8 space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             @csrf
-            @if ($isEditing) @method('PUT') @endif
+            @if ($isEditing)
+                @method('PUT')
+            @endif
             <div>
                 <label for="codigo" class="mb-2 block text-sm font-medium text-slate-700">Código del grupo</label>
                 <input id="codigo" name="codigo" value="{{ old('codigo', $grupo->codigo ?? '') }}" required maxlength="255" class="block w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
@@ -37,9 +39,14 @@
                 @error('periodo_id')<p class="mt-2 text-sm text-red-700">{{ $message }}</p>@enderror
             </div>
             <div>
-                <label for="docente" class="mb-2 block text-sm font-medium text-slate-700">Docente</label>
-                <input id="docente" name="docente" value="{{ old('docente', $grupo->docente ?? '') }}" required maxlength="255" class="block w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
-                @error('docente')<p class="mt-2 text-sm text-red-700">{{ $message }}</p>@enderror
+                <label for="profesor_id" class="mb-2 block text-sm font-medium text-slate-700">Profesor asignado</label>
+                <select id="profesor_id" name="profesor_id" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm">
+                    <option value="">Pendiente de asignación</option>
+                    @foreach ($profesores as $profesor)
+                        <option value="{{ $profesor->id }}" @selected((string) old('profesor_id', $grupo->profesor_id ?? '') === (string) $profesor->id)>{{ $profesor->nombre }}</option>
+                    @endforeach
+                </select>
+                @error('profesor_id')<p class="mt-2 text-sm text-red-700">{{ $message }}</p>@enderror
             </div>
             <div>
                 <label for="horario" class="mb-2 block text-sm font-medium text-slate-700">Horario</label>

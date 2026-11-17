@@ -8,6 +8,7 @@ use App\Models\Estudiante;
 use App\Models\Grupo;
 use App\Models\Matricula;
 use App\Models\Periodo;
+use App\Models\Profesor;
 use App\Models\Programa;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -89,25 +90,26 @@ class DatabaseSeeder extends Seeder
         foreach ([
             [
                 'asignatura' => $programacion,
-                'codigo' => 'SIS101-01',
-                'docente' => 'Laura Gómez',
-                'horario' => 'Lunes y miércoles, 08:00-10:00',
+                'codigo' => 'A101',
+                'profesor' => 'Laura Gómez',
             ],
             [
                 'asignatura' => $basesDeDatos,
-                'codigo' => 'SIS201-01',
-                'docente' => 'Carlos Rodríguez',
-                'horario' => 'Martes y jueves, 10:00-12:00',
+                'codigo' => 'A201',
+                'profesor' => 'Carlos Rodríguez',
             ],
         ] as $groupData) {
+            $profesor = Profesor::query()->firstOrCreate([
+                'nombre' => $groupData['profesor'],
+            ]);
+
             $grupo = Grupo::query()->firstOrCreate(
                 [
                     'asignatura_id' => $groupData['asignatura']->id,
                     'periodo_id' => $periodo->id,
-                    'horario' => $groupData['horario'],
+                    'profesor_id' => $profesor->id,
                 ],
                 [
-                    'docente' => $groupData['docente'],
                     'codigo' => $groupData['codigo'],
                     'cupo' => 30,
                 ],

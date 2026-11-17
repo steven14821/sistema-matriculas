@@ -40,7 +40,7 @@
 
     <div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200 text-left">
+            <table class="academic-table min-w-full divide-y divide-slate-200 text-left">
                 <thead class="bg-slate-50">
                     <tr>
                         <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Usuario</th>

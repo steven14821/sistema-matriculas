@@ -48,7 +48,9 @@ class EnrollStudentInGroup
                 ->lockForUpdate()
                 ->first();
 
-            if ($existingEnrollment?->estado === 'activa') {
+            if ($existingEnrollment !== null
+                && ! $existingEnrollment->trashed()
+                && $existingEnrollment->estado === 'activa') {
                 throw ValidationException::withMessages([
                     'grupo' => 'Ya tienes una matrícula activa en este grupo.',
                 ]);

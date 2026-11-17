@@ -7,6 +7,7 @@ use App\Http\Requests\SaveGrupoRequest;
 use App\Models\Asignatura;
 use App\Models\Grupo;
 use App\Models\Periodo;
+use App\Models\Profesor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -16,7 +17,7 @@ class GrupoController extends Controller
     {
         return view('staff.grupos.index', [
             'grupos' => Grupo::query()
-                ->with(['asignatura', 'periodo'])
+                ->with(['asignatura', 'periodo', 'profesor'])
                 ->orderBy('periodo_id')
                 ->orderBy('codigo')
                 ->paginate(15),
@@ -28,6 +29,7 @@ class GrupoController extends Controller
         return view('staff.grupos.form', [
             'asignaturas' => Asignatura::query()->orderBy('nombre')->get(),
             'periodos' => Periodo::query()->orderByDesc('fecha_inicio')->get(),
+            'profesores' => Profesor::query()->orderBy('nombre')->get(),
         ]);
     }
 
@@ -44,6 +46,7 @@ class GrupoController extends Controller
             'grupo' => $grupo,
             'asignaturas' => Asignatura::query()->orderBy('nombre')->get(),
             'periodos' => Periodo::query()->orderByDesc('fecha_inicio')->get(),
+            'profesores' => Profesor::query()->orderBy('nombre')->get(),
         ]);
     }
 

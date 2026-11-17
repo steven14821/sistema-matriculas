@@ -52,7 +52,7 @@
                                 </td>
                                 <td class="px-5 py-4 text-sm text-slate-700">{{ $matricula->grupo?->periodo?->nombre ?? 'Periodo no disponible' }}</td>
                                 <td class="px-5 py-4 text-sm text-slate-700">
-                                    <span class="block">{{ $matricula->grupo?->docente }}</span>
+                                    <span class="block">{{ $matricula->grupo?->profesor?->nombre ?? $matricula->grupo?->docente ?? 'Pendiente de asignación' }}</span>
                                     <span class="text-slate-500">{{ $matricula->grupo?->horario }}</span>
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-700">{{ $matricula->fecha->format('d/m/Y') }}</td>

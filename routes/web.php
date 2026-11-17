@@ -4,10 +4,12 @@ use App\Http\Controllers\Admin\AcademicOverviewController;
 use App\Http\Controllers\Admin\StudentOverviewController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OfertaAcademicaController;
 use App\Http\Controllers\Staff\AsignaturaController;
 use App\Http\Controllers\Staff\EnrollmentController as StaffEnrollmentController;
 use App\Http\Controllers\Staff\GrupoController;
 use App\Http\Controllers\Staff\PeriodoController;
+use App\Http\Controllers\Staff\ProfesorController;
 use App\Http\Controllers\Staff\ProgramaController;
 use App\Http\Controllers\Student\EnrollmentController;
 use Illuminate\Support\Facades\Route;
@@ -18,12 +20,17 @@ Route::get('/dashboard', DashboardController::class)
     ->middleware('auth')
     ->name('dashboard');
 
+Route::get('/oferta', [OfertaAcademicaController::class, 'index'])
+    ->middleware('auth')
+    ->name('oferta.index');
+
 Route::middleware(['auth', 'can:self-enroll'])
-    ->prefix('student')
-    ->name('student.')
     ->group(function (): void {
-        Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
-        Route::post('/groups/{grupo}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
+        Route::get('/student/enrollments', [EnrollmentController::class, 'index'])->name('student.enrollments.index');
+        Route::post('/student/groups/{grupo}/enrollments', [EnrollmentController::class, 'store'])->name('student.enrollments.store');
+        Route::get('/matriculas', [EnrollmentController::class, 'index'])->name('matriculas.mine');
+        Route::post('/matriculas/grupos/{grupo}', [EnrollmentController::class, 'store'])->name('matriculas.inscribir');
+        Route::delete('/matriculas/{matricula}', [EnrollmentController::class, 'destroy'])->name('matriculas.destroy');
     });
 
 Route::middleware(['auth', 'can:manage-users'])
@@ -45,6 +52,9 @@ Route::middleware(['auth', 'can:manage-academic'])
         Route::resource('asignaturas', AsignaturaController::class)->except('show');
         Route::resource('periodos', PeriodoController::class)->except('show');
         Route::resource('grupos', GrupoController::class)->except('show');
+        Route::resource('profesores', ProfesorController::class)
+            ->parameters(['profesores' => 'profesor'])
+            ->except('show');
     });
 
 Route::middleware(['auth', 'can:manage-enrollments'])

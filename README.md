@@ -27,12 +27,14 @@ Un prototipo web robusto desarrollado en **Laravel** bajo la arquitectura **Mode
 | Código | Descripción | Perfil / Rol |
 | :--- | :--- | :--- |
 | **RF-01** | Autenticación de usuarios mediante credenciales seguras. | Admin, Estudiante, Funcionario |
-| **RF-02 - RF-05** | Gestión CRUD completa de Programas, Asignaturas, Periodos Académicos y Grupos. | Administrador |
-| **RF-06 - RF-09** | Consulta de Programas, Asignaturas, Periodos Lectivos y Oferta de Grupos. | Todos los roles |
-| **RF-10 - RF-17** | Edición y eliminación lógica de entidades académicas base. | Administrador |
-| **RF-18 - RF-19** | Inscripción y asignación manual de asignaturas y grupos a estudiantes. | Admin, Funcionario |
+| **RF-02** | Creación de usuarios y asignación de roles. | Administrador |
+| **RF-03 - RF-05** | Gestión CRUD de carreras, asignaturas, periodos y grupos. | Funcionario |
+| **RF-06 - RF-09** | Consulta del catálogo académico y de la información de estudiantes. | Administrador |
+| **RF-10 - RF-17** | Consulta de carreras, asignaturas, periodos, grupos y oferta académica. | Todos los roles, según permisos |
+| **RF-18 - RF-19** | Inscripción y asignación manual de asignaturas y grupos a estudiantes. | Funcionario |
 | **RF-20 - RF-21** | Autogestión de matrícula y selección de grupos según cupo disponible. | Estudiante |
-| **RF-22 - RF-23** | Búsqueda avanzada y filtrado de matrículas por periodo/estudiante. | Admin, Funcionario |
+| **RF-22 - RF-23** | Consulta de matrículas por periodo y ficha individual del estudiante. | Administrador; gestión de matrículas por Funcionario |
+| **RF-24** | Gestión del catálogo de profesores y asignación a grupos identificados por código. | Funcionario |
 
 ### 🔒 Requerimientos No Funcionales (RNF)
 
@@ -63,8 +65,11 @@ La entidad central **`matriculas`** resuelve la relación de muchos a muchos ent
 * **`programas`**: `id`, `nombre`, `nivel`
 * **`asignaturas`**: `id`, `programa_id`, `codigo`, `nombre`, `creditos`
 * **`periodos`**: `id`, `nombre`, `fecha_inicio`, `fecha_fin`, `abierto`
-* **`grupos`**: `id`, `asignatura_id`, `periodo_id`, `docente`, `horario`, `cupo`
+* **`profesores`**: `id`, `nombre`
+* **`grupos`**: `id`, `codigo`, `asignatura_id`, `periodo_id`, `profesor_id`, `cupo`
 * **`matriculas`**: `id`, `estudiante_id`, `grupo_id`, `estado`, `fecha`
+
+Una asignatura puede tener varios grupos en el mismo periodo. Cada grupo se identifica con un código como `A101`; el código debe ser único dentro de su asignatura y periodo. Los funcionarios administran el catálogo independiente de profesores y los asignan a los grupos. La oferta muestra el profesor, el horario y los cupos disponibles.
 
 ---
 
@@ -72,7 +77,7 @@ La entidad central **`matriculas`** resuelve la relación de muchos a muchos ent
 
 ### Perfiles y acceso de demostración
 
-El sistema incluye los roles **Administrador**, **Funcionario** y **Estudiante**. El administrador puede crear, consultar, editar y eliminar usuarios desde su panel; cada perfil autenticado ve su propio panel. Los usuarios de demostración se crean únicamente en entornos `local` y `testing` al ejecutar `php artisan migrate --seed`:
+El sistema incluye los roles **Administrador**, **Funcionario** y **Estudiante**. El administrador crea usuarios y asigna roles; además, consulta el catálogo académico y la ficha e historial de matrículas de cada estudiante. El funcionario gestiona carreras, asignaturas, periodos, grupos, profesores y matrículas. Cada perfil autenticado ve su propio panel. Los usuarios de demostración se crean únicamente en entornos `local` y `testing` al ejecutar `php artisan migrate --seed`:
 
 | Rol | Correo | Contraseña |
 | :--- | :--- | :--- |

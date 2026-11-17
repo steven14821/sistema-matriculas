@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['codigo', 'asignatura_id', 'periodo_id', 'docente', 'horario', 'cupo'])]
+#[Fillable(['codigo', 'asignatura_id', 'periodo_id', 'profesor_id', 'docente', 'horario', 'cupo'])]
 class Grupo extends Model
 {
     use SoftDeletes;
@@ -21,6 +21,11 @@ class Grupo extends Model
     public function periodo(): BelongsTo
     {
         return $this->belongsTo(Periodo::class);
+    }
+
+    public function profesor(): BelongsTo
+    {
+        return $this->belongsTo(Profesor::class);
     }
 
     public function matriculas(): HasMany

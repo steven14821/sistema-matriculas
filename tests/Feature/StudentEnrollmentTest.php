@@ -330,6 +330,7 @@ class StudentEnrollmentTest extends TestCase
         int $capacity = 30,
     ): Grupo {
         return Grupo::query()->create([
+            'codigo' => 'GRP-'.(Grupo::withTrashed()->count() + 1),
             'asignatura_id' => $subject->id,
             'periodo_id' => $period->id,
             'docente' => 'Laura Gómez',

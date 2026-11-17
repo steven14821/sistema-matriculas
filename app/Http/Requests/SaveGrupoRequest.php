@@ -38,7 +38,7 @@ class SaveGrupoRequest extends FormRequest
             ],
             'asignatura_id' => ['required', 'integer', Rule::exists('asignaturas', 'id')->whereNull('deleted_at')],
             'periodo_id' => ['required', 'integer', Rule::exists('periodos', 'id')->whereNull('deleted_at')],
-            'docente' => ['required', 'string', 'max:255'],
+            'profesor_id' => ['nullable', 'integer', Rule::exists('profesores', 'id')],
             'horario' => ['required', 'string', 'max:255'],
             'cupo' => ['required', 'integer', 'min:1'],
         ];
