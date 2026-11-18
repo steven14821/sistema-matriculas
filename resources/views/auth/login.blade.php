@@ -4,130 +4,113 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
+    <meta name="description" content="Ingresa al portal académico de Saint Victoria Academy con tus credenciales institucionales.">
     <title>Iniciar sesión | Saint Victoria Academy</title>
     @fonts
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/landing.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-    <main class="min-h-screen md:grid md:grid-cols-2">
-        <section class="relative hidden min-h-screen flex-col justify-between overflow-hidden bg-indigo-800 px-12 py-10 text-white md:flex lg:px-16">
-            <div class="absolute inset-5 border border-amber-200/25" aria-hidden="true"></div>
+<body class="site-home site-login antialiased">
+    <main class="site-home__frame">
+        <div class="site-home__paper">
+            <div class="site-home__scallop" aria-hidden="true"></div>
+            <div class="site-home__inner">
+                <header class="site-home__masthead">
+                    <a href="{{ route('home') }}" class="site-home__brand" aria-label="Saint Victoria Academy, inicio">
+                        <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="" class="site-home__seal">
+                        <span class="site-home__brand-copy">
+                            <span class="site-home__brand-name">Saint Victoria Academy</span>
+                            <span class="site-home__brand-note">Portal académico</span>
+                        </span>
+                    </a>
+                    <a href="{{ route('home') }}" class="site-home__access">Volver a la portada</a>
+                </header>
 
-            <a href="{{ url('/') }}" class="relative flex w-fit items-center gap-3">
-                <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="" class="size-12 rounded-full border border-amber-200/60 bg-slate-50 object-cover">
-                <span>
-                    <span class="block font-serif text-base font-semibold tracking-wide">Saint Victoria Academy</span>
-                    <span class="block text-xs uppercase tracking-[0.16em] text-slate-300">Sistema de matrículas</span>
-                </span>
-            </a>
-
-            <div class="relative max-w-lg py-16">
-                <h1 class="font-serif text-5xl font-medium leading-tight tracking-tight lg:text-6xl">
-                    Tu recorrido académico, en orden.
-                </h1>
-                <p class="mt-6 max-w-md text-base leading-7 text-slate-300">
-                    Accede a la oferta, consulta tu matrícula y mantén tu información académica a mano.
-                </p>
-
-                <div class="mt-12 flex items-center gap-4 border-t border-amber-200/30 pt-6">
-                    <span class="flex size-10 items-center justify-center rounded-full border border-amber-200/50 text-amber-200">
-                        <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M12 3 5 6v5c0 4.5 2.9 7.7 7 10 4.1-2.3 7-5.5 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-                            <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                    <p class="text-sm text-slate-300">Sistema institucional de matrículas</p>
-                </div>
-            </div>
-
-            <p class="relative text-xs text-slate-400">© {{ date('Y') }} Saint Victoria Academy</p>
-        </section>
-
-        <section class="flex min-h-screen items-center justify-center bg-slate-50 px-6 py-12 sm:px-10">
-            <div class="w-full max-w-md">
-                <a href="{{ url('/') }}" class="mb-10 flex w-fit items-center gap-3 md:hidden">
-                    <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="Saint Victoria Academy" class="size-12 rounded-xl object-cover shadow-sm ring-1 ring-slate-200">
-                    <span>
-                        <span class="block font-serif text-base font-semibold">Saint Victoria Academy</span>
-                        <span class="block text-xs uppercase tracking-[0.16em] text-slate-500">Sistema de matrículas</span>
-                    </span>
-                </a>
-
-                <div class="mb-8 border border-slate-200 bg-white p-6 shadow-lg shadow-slate-900/5 sm:p-8">
-                    <div class="mb-8">
-                        <h2 class="font-serif text-4xl font-semibold tracking-tight text-slate-950">Iniciar sesión</h2>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">
-                            Ingresa tus credenciales institucionales para continuar.
+                <div class="site-login__layout">
+                    <section class="site-login__welcome" aria-labelledby="login-welcome-title">
+                        <h1 id="login-welcome-title">Continúa tu<br><span>recorrido.</span></h1>
+                        <p>
+                            Ingresa con tus credenciales institucionales para consultar la oferta y continuar con las opciones de tu perfil.
                         </p>
-                    </div>
+                        <div class="site-login__note">
+                            <span class="site-login__note-rule" aria-hidden="true"></span>
+                            <span>El acceso está reservado para usuarios autorizados de la institución.</span>
+                        </div>
+                    </section>
 
-                    <form method="POST" action="{{ route('login.store') }}" class="space-y-5">
-                        @csrf
-
-                        <div>
-                            <label for="email" class="mb-2 block text-sm font-medium text-slate-700">Correo electrónico</label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                value="{{ old('email') }}"
-                                required
-                                autofocus
-                                autocomplete="username"
-                                inputmode="email"
-                                aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}"
-                                @if ($errors->has('email')) aria-describedby="email-error" @endif
-                                class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15"
-                                placeholder="nombre@institucion.edu.co"
-                            >
-                            @error('email')
-                                <p id="email-error" class="mt-2 text-sm text-red-700" role="alert">{{ $message }}</p>
-                            @enderror
+                    <section class="site-login__form-section" aria-labelledby="login-title">
+                        <div class="site-login__form-heading">
+                            <h2 id="login-title">Iniciar sesión</h2>
+                            <p>Usa tu correo y contraseña institucionales.</p>
                         </div>
 
-                        <div>
-                            <label for="password" class="mb-2 block text-sm font-medium text-slate-700">Contraseña</label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                required
-                                autocomplete="current-password"
-                                aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
-                                @if ($errors->has('password')) aria-describedby="password-error" @endif
-                                class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15"
-                                placeholder="Ingresa tu contraseña"
-                            >
-                            @error('password')
-                                <p id="password-error" class="mt-2 text-sm text-red-700" role="alert">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        <form method="POST" action="{{ route('login.store') }}" class="site-login__form">
+                            @csrf
 
-                        <label for="remember" class="flex w-fit cursor-pointer items-center gap-3 text-sm text-slate-600">
-                            <input
-                                id="remember"
-                                name="remember"
-                                type="checkbox"
-                                value="1"
-                                class="size-4 rounded border-slate-300 text-indigo-700 focus:ring-indigo-500"
-                            >
-                            Recordarme en este dispositivo
-                        </label>
+                            <div class="site-login__field">
+                                <label for="email">Correo electrónico</label>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    value="{{ old('email') }}"
+                                    required
+                                    autofocus
+                                    autocomplete="username"
+                                    inputmode="email"
+                                    aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}"
+                                    @if ($errors->has('email')) aria-describedby="email-error" @endif
+                                    placeholder="nombre@institucion.edu.co"
+                                >
+                                @error('email')
+                                    <p id="email-error" class="site-login__error" role="alert">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                        <button
-                            type="submit"
-                            class="flex w-full items-center justify-center rounded-xl bg-indigo-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-950/15 transition hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-500/25"
-                        >
-                            Ingresar
-                        </button>
-                    </form>
+                            <div class="site-login__field">
+                                <label for="password">Contraseña</label>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    required
+                                    autocomplete="current-password"
+                                    aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
+                                    @if ($errors->has('password')) aria-describedby="password-error" @endif
+                                    placeholder="Ingresa tu contraseña"
+                                >
+                                @error('password')
+                                    <p id="password-error" class="site-login__error" role="alert">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                    <p class="mt-8 border-t border-slate-200 pt-6 text-center text-xs leading-5 text-slate-500">
-                        El acceso está reservado para usuarios autorizados de la institución.
-                    </p>
+                            <label for="remember" class="site-login__remember">
+                                <input
+                                    id="remember"
+                                    name="remember"
+                                    type="checkbox"
+                                    value="1"
+                                >
+                                <span>Recordarme en este dispositivo</span>
+                            </label>
+
+                            <button type="submit" class="site-home__primary site-login__submit">
+                                <span>Ingresar</span>
+                                <svg viewBox="0 0 20 20" aria-hidden="true">
+                                    <path d="M3.5 10h12m-5-5 5 5-5 5"/>
+                                </svg>
+                            </button>
+                        </form>
+
+                        <p class="site-login__security">Tu sesión te mostrará únicamente las herramientas habilitadas para tu perfil.</p>
+                    </section>
                 </div>
+
+                <footer class="site-home__footer site-login__footer">
+                    <span>© {{ date('Y') }} Saint Victoria Academy</span>
+                    <a href="{{ route('home') }}">Volver a la portada</a>
+                </footer>
             </div>
-        </section>
+        </div>
     </main>
 </body>
 </html>

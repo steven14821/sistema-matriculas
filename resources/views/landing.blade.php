@@ -4,65 +4,145 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
-    <title>Saint Victoria Academy | Sistema de Matrículas</title>
+    <meta name="description" content="Consulta la oferta académica de Saint Victoria Academy y accede al portal de matrículas según tu perfil.">
+    <title>Saint Victoria Academy | Portal académico</title>
     @fonts
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/landing.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-    <main class="mx-auto flex min-h-screen max-w-[1440px] flex-col px-5 sm:px-8 lg:px-14">
-        <header class="flex items-center justify-between gap-5 border-b border-slate-200 py-5">
-            <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="" class="size-12 rounded-full border border-amber-700/40 bg-white object-cover">
-                <span>
-                    <span class="block font-serif text-lg font-semibold text-slate-950">Saint Victoria Academy</span>
-                    <span class="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Sistema de matrículas</span>
-                </span>
-            </a>
-            <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="border border-indigo-700 px-4 py-2.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-700 hover:text-white">
-                {{ auth()->check() ? 'Ir a mi panel' : 'Iniciar sesión' }}
-            </a>
-        </header>
+<body class="site-home antialiased">
+    <main class="site-home__frame">
+        <div class="site-home__paper">
+            <div class="site-home__scallop" aria-hidden="true"></div>
+            <div class="site-home__inner">
+                <header class="site-home__masthead">
+                    <a href="{{ route('home') }}" class="site-home__brand" aria-label="Saint Victoria Academy, inicio">
+                        <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="" class="site-home__seal">
+                        <span class="site-home__brand-copy">
+                            <span class="site-home__brand-name">Saint Victoria Academy</span>
+                            <span class="site-home__brand-note">Portal académico</span>
+                        </span>
+                    </a>
 
-        <section class="grid flex-1 items-center gap-12 py-14 md:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
-            <div class="max-w-3xl">
-                <h1 class="max-w-3xl font-serif text-5xl font-medium leading-[1.08] tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">
-                    Tu recorrido académico, en orden.
-                </h1>
-                <p class="mt-7 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
-                    Consulta la oferta, realiza tu matrícula y encuentra la información de tu periodo académico en un solo lugar.
-                </p>
-                <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="mt-9 inline-flex items-center gap-4 bg-indigo-700 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-indigo-800">
-                    {{ auth()->check() ? 'Continuar al panel' : 'Acceder al sistema' }}
-                    <span aria-hidden="true">→</span>
-                </a>
+                    <nav class="site-home__nav" aria-label="Navegación principal">
+                        <a href="#oferta-vigente">Oferta vigente</a>
+                        <a href="#perfiles">Perfiles</a>
+                    </nav>
 
-                <div class="mt-14 grid max-w-xl grid-cols-3 border-y border-slate-200 py-5">
-                    @foreach ([['01', 'Oferta'], ['02', 'Matrícula'], ['03', 'Seguimiento']] as [$number, $label])
-                        <div class="flex items-center gap-2.5 {{ $loop->index > 0 ? 'border-l border-slate-200 pl-4 sm:pl-6' : '' }}">
-                            <span class="font-serif text-xs text-amber-800">{{ $number }}</span>
-                            <span class="text-xs font-medium text-slate-700 sm:text-sm">{{ $label }}</span>
+                    <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="site-home__access">
+                        {{ auth()->check() ? 'Ir al panel' : 'Iniciar sesión' }}
+                    </a>
+                </header>
+
+                <section class="site-home__bill" aria-labelledby="home-title">
+                    <h1 id="home-title">Conoce la oferta.<br><span>Elige tu grupo.</span></h1>
+                    <p class="site-home__intro">
+                        Revisa programas, asignaturas y grupos de periodos abiertos. Después, ingresa al portal con tu perfil institucional para continuar tu matrícula.
+                    </p>
+
+                    <dl class="site-home__facts" aria-label="Resumen de la oferta académica">
+                        <div>
+                            <dd>{{ $programas->count() }}</dd>
+                            <dt>Programas</dt>
                         </div>
-                    @endforeach
-                </div>
+                        <div>
+                            <dd>{{ $asignaturas->count() }}</dd>
+                            <dt>Asignaturas</dt>
+                        </div>
+                        <div>
+                            <dd>{{ $grupos->count() }}</dd>
+                            <dt>Grupos en periodos abiertos</dt>
+                        </div>
+                    </dl>
+
+                    <div class="site-home__actions">
+                        <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="site-home__primary">
+                            <span>{{ auth()->check() ? 'Continuar al panel' : 'Entrar al portal' }}</span>
+                            <svg viewBox="0 0 20 20" aria-hidden="true">
+                                <path d="M3.5 10h12m-5-5 5 5-5 5"/>
+                            </svg>
+                        </a>
+                        <a href="#oferta-vigente" class="site-home__secondary">Ver grupos del periodo</a>
+                    </div>
+                    <p class="site-home__access-note">El acceso y las opciones disponibles dependen de tu perfil institucional.</p>
+                </section>
+
+                <section id="oferta-vigente" class="site-home__offer" aria-labelledby="offer-title">
+                    <div class="site-home__offer-heading">
+                        <h2 id="offer-title">Una mirada a la oferta.</h2>
+                        <p>Asignaturas y grupos asociados a periodos que se encuentran abiertos.</p>
+                    </div>
+
+                    <div class="site-home__offer-content">
+                        <div class="site-home__group-list">
+                            @forelse ($grupos->take(5) as $grupo)
+                                <article class="site-home__group">
+                                    <span class="site-home__group-code">Grupo {{ $grupo->codigo }}</span>
+                                    <h3>{{ $grupo->asignatura?->nombre }}</h3>
+                                    <span class="site-home__group-period">{{ $grupo->periodo?->nombre }}</span>
+                                </article>
+                            @empty
+                                <p class="site-home__empty">
+                                    No hay grupos asociados a periodos abiertos en este momento. Vuelve a consultar más adelante.
+                                </p>
+                            @endforelse
+                        </div>
+
+                        <aside class="site-home__programs" aria-labelledby="programs-title">
+                            <h3 id="programs-title">Programas del catálogo</h3>
+                            @forelse ($programas->take(4) as $programa)
+                                <div class="site-home__program">
+                                    <span>{{ $programa->nombre }}</span>
+                                    <span>{{ $programa->asignaturas_count }} {{ $programa->asignaturas_count === 1 ? 'asignatura' : 'asignaturas' }}</span>
+                                </div>
+                            @empty
+                                <p class="site-home__empty">El catálogo de programas aún no tiene registros.</p>
+                            @endforelse
+                            @if ($programas->count() > 4)
+                                <p class="site-home__more-programs">Y {{ $programas->count() - 4 }} programas más en el catálogo.</p>
+                            @endif
+                        </aside>
+                    </div>
+                    <a href="{{ auth()->check() ? route('oferta.index') : route('login') }}" class="site-home__offer-link">
+                        {{ auth()->check() ? 'Consultar toda la oferta' : 'Inicia sesión para consultar la oferta completa' }}
+                    </a>
+                </section>
+
+                <section id="perfiles" class="site-home__profiles" aria-labelledby="profiles-title">
+                    <h2 id="profiles-title">Un portal, distintos recorridos.</h2>
+                    <p class="site-home__profiles-intro">Cada perfil encuentra las herramientas que necesita para su trabajo académico.</p>
+
+                    <div class="site-home__role-list">
+                        <article class="site-home__role">
+                            <h3>Estudiantes</h3>
+                            <p>Consulta grupos disponibles, gestiona tu matrícula y revisa tu recorrido académico.</p>
+                        </article>
+                        <article class="site-home__role">
+                            <h3>Funcionarios</h3>
+                            <p>Administra la oferta académica y acompaña los procesos de matrícula.</p>
+                        </article>
+                        <article class="site-home__role">
+                            <h3>Administradores</h3>
+                            <p>Gestiona usuarios y consulta el catálogo y la información académica.</p>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="site-home__closing" aria-labelledby="closing-title">
+                    <h2 id="closing-title">El siguiente paso está en el portal.</h2>
+                    <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="site-home__closing-link">
+                        {{ auth()->check() ? 'Continuar al panel' : 'Ingresar con mi perfil' }}
+                        <svg viewBox="0 0 20 20" aria-hidden="true">
+                            <path d="M3.5 10h12m-5-5 5 5-5 5"/>
+                        </svg>
+                    </a>
+                </section>
+
+                <footer class="site-home__footer">
+                    <span>© {{ date('Y') }} Saint Victoria Academy</span>
+                    <span>Oferta académica · Matrículas · Seguimiento</span>
+                </footer>
             </div>
-
-            <aside class="relative mx-auto w-full max-w-[460px] lg:mr-0">
-                <div class="absolute -inset-3 border border-amber-700/50" aria-hidden="true"></div>
-                <div class="relative flex min-h-[430px] flex-col items-center justify-center overflow-hidden bg-indigo-800 px-8 py-12 text-center text-white sm:min-h-[500px]">
-                    <div class="absolute inset-3 border border-amber-200/30" aria-hidden="true"></div>
-                    <div class="absolute left-1/2 top-0 h-20 w-px -translate-x-1/2 bg-amber-200/50" aria-hidden="true"></div>
-                    <img src="{{ asset('images/saint-victoria-academy-logo.png') }}" alt="Emblema de Saint Victoria Academy" class="relative size-48 rounded-full border border-amber-200/70 bg-slate-50 object-cover shadow-[0_0_0_10px_rgba(234,211,154,0.08)] sm:size-56">
-                    <p class="relative mt-8 font-serif text-2xl tracking-wide sm:text-3xl">Saint Victoria Academy</p>
-                    <p class="relative mt-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-200">Sistema institucional de matrículas</p>
-                    <div class="absolute bottom-0 left-1/2 h-12 w-px -translate-x-1/2 bg-amber-200/50" aria-hidden="true"></div>
-                </div>
-            </aside>
-        </section>
-
-        <footer class="flex flex-col gap-2 border-t border-slate-200 py-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-            <span>© {{ date('Y') }} Saint Victoria Academy</span>
-            <span>Oferta académica · Matrículas · Seguimiento</span>
-        </footer>
+        </div>
     </main>
 </body>
 </html>

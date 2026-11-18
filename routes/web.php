@@ -12,9 +12,35 @@ use App\Http\Controllers\Staff\PeriodoController;
 use App\Http\Controllers\Staff\ProfesorController;
 use App\Http\Controllers\Staff\ProgramaController;
 use App\Http\Controllers\Student\EnrollmentController;
+use App\Models\Asignatura;
+use App\Models\Grupo;
+use App\Models\Programa;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'landing')->name('home');
+Route::get('/', function (): View {
+    $programas = Programa::query()
+        ->withCount('asignaturas')
+        ->orderBy('nombre')
+        ->get();
+
+    $asignaturas = Asignatura::query()
+        ->with('programa')
+        ->orderBy('nombre')
+        ->get();
+
+    $grupos = Grupo::query()
+        ->with(['asignatura', 'periodo', 'profesor'])
+        ->whereHas('periodo', fn ($query) => $query->where('abierto', true))
+        ->orderBy('id')
+        ->get();
+
+    return view('landing', [
+        'programas' => $programas,
+        'asignaturas' => $asignaturas,
+        'grupos' => $grupos,
+    ]);
+})->name('home');
 
 Route::get('/dashboard', DashboardController::class)
     ->middleware('auth')
