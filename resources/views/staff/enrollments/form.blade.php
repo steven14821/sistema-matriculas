@@ -22,7 +22,7 @@
                 <select id="estudiante_id" name="estudiante_id" required class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm">
                     <option value="">Selecciona un estudiante</option>
                     @foreach ($estudiantes as $estudiante)
-                        <option value="{{ $estudiante->id }}" @selected((string) old('estudiante_id') === (string) $estudiante->id)>{{ $estudiante->codigo }} · {{ $estudiante->usuario->name }} ({{ $estudiante->programa->nombre }})</option>
+                        <option value="{{ $estudiante->id }}" @selected((string) old('estudiante_id') === (string) $estudiante->id)>{{ $estudiante->codigo }} · {{ $estudiante->usuario->name }} ({{ $estudiante->programa?->nombre ?? 'Programa pendiente' }})</option>
                     @endforeach
                 </select>
                 @error('estudiante_id')<p class="mt-2 text-sm text-red-700">{{ $message }}</p>@enderror
@@ -39,7 +39,7 @@
             </div>
             @if ($estudiantes->isEmpty() || $grupos->isEmpty())
                 <p class="rounded-xl bg-amber-50 p-4 text-sm leading-6 text-amber-900">
-                    @if ($estudiantes->isEmpty()) No hay estudiantes con perfil académico asociado. @endif
+                    @if ($estudiantes->isEmpty()) No hay estudiantes con programa asignado. @endif
                     @if ($grupos->isEmpty()) No hay grupos en periodos actualmente abiertos. @endif
                 </p>
             @endif

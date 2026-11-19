@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['nombre', 'fecha_inicio', 'fecha_fin', 'abierto'])]
+#[Fillable(['nombre', 'fecha_inicio', 'fecha_fin', 'abierto', 'limite_creditos'])]
 class Periodo extends Model
 {
     use SoftDeletes;
@@ -18,6 +18,7 @@ class Periodo extends Model
             'fecha_inicio' => 'date',
             'fecha_fin' => 'date',
             'abierto' => 'boolean',
+            'limite_creditos' => 'integer',
         ];
     }
 

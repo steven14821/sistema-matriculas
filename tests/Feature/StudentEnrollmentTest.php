@@ -272,6 +272,89 @@ class StudentEnrollmentTest extends TestCase
         $this->assertDatabaseCount('matriculas', 0);
     }
 
+    public function test_student_cannot_enroll_until_a_credit_limit_is_configured_for_the_period(): void
+    {
+        $this->freezeEnrollmentDate();
+        ['user' => $user, 'program' => $program] = $this->createStudent();
+        $group = $this->createGroup(
+            $this->createSubject($program, 'SIS101', 'Programación'),
+            $this->createPeriod(true, null, null, null),
+        );
+
+        $this->actingAs($user)
+            ->from(route('student.enrollments.index'))
+            ->post(route('student.enrollments.store', $group))
+            ->assertRedirect(route('student.enrollments.index'))
+            ->assertSessionHasErrors([
+                'grupo' => 'Este periodo aún no tiene un límite de créditos configurado. Contacta al funcionario.',
+            ]);
+
+        $this->assertDatabaseCount('matriculas', 0);
+    }
+
+    public function test_student_cannot_exceed_the_credit_limit_for_a_period(): void
+    {
+        $this->freezeEnrollmentDate();
+        ['user' => $user, 'student' => $student, 'program' => $program] = $this->createStudent();
+        $period = $this->createPeriod(true, null, null, 5);
+        $firstGroup = $this->createGroup(
+            $this->createSubject($program, 'SIS101', 'Programación', 3),
+            $period,
+        );
+        $secondGroup = $this->createGroup(
+            $this->createSubject($program, 'SIS201', 'Bases de datos', 3),
+            $period,
+        );
+
+        $this->actingAs($user)
+            ->post(route('student.enrollments.store', $firstGroup))
+            ->assertRedirect(route('student.enrollments.index'));
+
+        $this->from(route('student.enrollments.index'))
+            ->post(route('student.enrollments.store', $secondGroup))
+            ->assertRedirect(route('student.enrollments.index'))
+            ->assertSessionHasErrors([
+                'grupo' => 'La asignatura excede el límite de 5 créditos del periodo. Te quedan 2 créditos disponibles.',
+            ]);
+
+        $this->assertDatabaseHas('matriculas', [
+            'estudiante_id' => $student->id,
+            'grupo_id' => $firstGroup->id,
+            'estado' => 'activa',
+        ]);
+        $this->assertDatabaseMissing('matriculas', [
+            'estudiante_id' => $student->id,
+            'grupo_id' => $secondGroup->id,
+        ]);
+    }
+
+    public function test_student_credit_limits_are_calculated_separately_for_each_period(): void
+    {
+        $this->freezeEnrollmentDate();
+        ['user' => $user, 'student' => $student, 'program' => $program] = $this->createStudent();
+        $firstGroup = $this->createGroup(
+            $this->createSubject($program, 'SIS101', 'Programación'),
+            $this->createPeriod(true, null, null, 3),
+        );
+        $secondGroup = $this->createGroup(
+            $this->createSubject($program, 'SIS201', 'Bases de datos'),
+            $this->createPeriod(true, null, null, 3),
+        );
+
+        foreach ([$firstGroup, $secondGroup] as $group) {
+            $this->actingAs($user)
+                ->post(route('student.enrollments.store', $group))
+                ->assertRedirect(route('student.enrollments.index'));
+        }
+
+        $this->assertDatabaseCount('matriculas', 2);
+        $this->assertDatabaseHas('matriculas', [
+            'estudiante_id' => $student->id,
+            'grupo_id' => $secondGroup->id,
+            'estado' => 'activa',
+        ]);
+    }
+
     /**
      * @return array{user: User, student: Estudiante, program: Programa}
      */
@@ -301,13 +384,13 @@ class StudentEnrollmentTest extends TestCase
         ]);
     }
 
-    private function createSubject(Programa $program, string $code, string $name): Asignatura
+    private function createSubject(Programa $program, string $code, string $name, int $credits = 3): Asignatura
     {
         return Asignatura::query()->create([
             'programa_id' => $program->id,
             'codigo' => $code,
             'nombre' => $name,
-            'creditos' => 3,
+            'creditos' => $credits,
         ]);
     }
 
@@ -315,12 +398,14 @@ class StudentEnrollmentTest extends TestCase
         bool $open = true,
         ?string $startDate = null,
         ?string $endDate = null,
+        ?int $limitCredits = 18,
     ): Periodo {
         return Periodo::query()->create([
             'nombre' => 'Periodo '.(Periodo::query()->count() + 1),
             'fecha_inicio' => $startDate ?? today()->subDay()->toDateString(),
             'fecha_fin' => $endDate ?? today()->addDay()->toDateString(),
             'abierto' => $open,
+            'limite_creditos' => $limitCredits,
         ]);
     }
 

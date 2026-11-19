@@ -27,4 +27,9 @@ class Estudiante extends Model
     {
         return $this->hasMany(Matricula::class);
     }
+
+    public function solicitudesPrograma(): HasMany
+    {
+        return $this->hasMany(SolicitudPrograma::class);
+    }
 }

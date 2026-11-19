@@ -30,7 +30,12 @@ class StoreUserRequest extends FormRequest
             'role' => ['required', Rule::enum(UserRole::class)],
             'codigo' => ['exclude_unless:role,estudiante', 'required', 'string', 'max:255', Rule::unique('estudiantes', 'codigo')],
             'documento' => ['exclude_unless:role,estudiante', 'required', 'string', 'max:255', Rule::unique('estudiantes', 'documento')],
-            'programa_id' => ['exclude_unless:role,estudiante', 'required', 'integer', Rule::exists('programas', 'id')],
+            'programa_id' => [
+                'exclude_unless:role,estudiante',
+                'nullable',
+                'integer',
+                Rule::exists('programas', 'id')->whereNull('deleted_at'),
+            ],
         ];
     }
 }

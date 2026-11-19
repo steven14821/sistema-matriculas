@@ -32,6 +32,7 @@ class SavePeriodoRequest extends FormRequest
             'fecha_inicio' => ['required', 'date'],
             'fecha_fin' => ['required', 'date', 'after_or_equal:fecha_inicio'],
             'abierto' => ['required', 'boolean'],
+            'limite_creditos' => ['required', 'integer', 'min:1', 'max:65535'],
         ];
     }
 

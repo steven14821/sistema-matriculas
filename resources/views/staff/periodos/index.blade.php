@@ -18,6 +18,7 @@
                 <thead class="bg-slate-50"><tr>
                     <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Periodo</th>
                     <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Fechas</th>
+                    <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Límite de créditos</th>
                     <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Matrícula</th>
                     <th class="px-5 py-4 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Acciones</th>
                 </tr></thead>
@@ -26,6 +27,13 @@
                         <tr>
                             <td class="px-5 py-4 text-sm font-semibold text-slate-900">{{ $periodo->nombre }}</td>
                             <td class="px-5 py-4 text-sm text-slate-700">{{ $periodo->fecha_inicio->format('d/m/Y') }} – {{ $periodo->fecha_fin->format('d/m/Y') }}</td>
+                            <td class="px-5 py-4 text-sm text-slate-700">
+                                @if ($periodo->limite_creditos === null)
+                                    <span class="font-medium text-amber-800">Sin configurar</span>
+                                @else
+                                    {{ $periodo->limite_creditos }} créditos
+                                @endif
+                            </td>
                             <td class="px-5 py-4 text-sm">{{ $periodo->abierto ? 'Abierta' : 'Cerrada' }}</td>
                             <td class="px-5 py-4"><div class="flex justify-end gap-4">
                                 <a href="{{ route('staff.periodos.edit', $periodo) }}" class="text-sm font-semibold text-indigo-700">Editar</a>
@@ -33,7 +41,7 @@
                             </div></td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="px-5 py-10 text-center text-sm text-slate-500">Aún no hay periodos registrados.</td></tr>
+                        <tr><td colspan="5" class="px-5 py-10 text-center text-sm text-slate-500">Aún no hay periodos registrados.</td></tr>
                     @endforelse
                 </tbody>
             </table>

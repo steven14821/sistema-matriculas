@@ -22,6 +22,7 @@
                 ? [
                     ['Panel', 'dashboard', 'dashboard'],
                     ['Matrículas', 'staff.enrollments.index', 'staff.enrollments.*'],
+                    ['Solicitudes de programa', 'staff.solicitudes_programa.index', 'staff.solicitudes_programa.*'],
                     ['Carreras', 'staff.programas.index', 'staff.programas.*'],
                     ['Asignaturas', 'staff.asignaturas.index', 'staff.asignaturas.*'],
                     ['Periodos', 'staff.periodos.index', 'staff.periodos.*'],

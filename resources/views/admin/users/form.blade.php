@@ -67,11 +67,12 @@
                 <div>
                     <label for="programa_id" class="mb-2 block text-sm font-medium text-slate-700">Programa académico</label>
                     <select id="programa_id" name="programa_id" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15">
-                        <option value="">Selecciona un programa</option>
+                        <option value="">Sin programa asignado</option>
                         @foreach ($programas as $programa)
                             <option value="{{ $programa->id }}" @selected((string) old('programa_id', '') === (string) $programa->id)>{{ $programa->nombre }}</option>
                         @endforeach
                     </select>
+                    <p class="mt-2 text-xs leading-5 text-slate-500">Si lo dejas sin asignar, el estudiante podrá solicitar un programa y adjuntar su recibo de pago.</p>
                     @error('programa_id')
                         <p class="mt-2 text-sm text-red-700" role="alert">{{ $message }}</p>
                     @enderror

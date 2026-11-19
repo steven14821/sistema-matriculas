@@ -125,6 +125,7 @@ class StaffEnrollmentTest extends TestCase
             'fecha_inicio' => today()->subDay()->toDateString(),
             'fecha_fin' => today()->addDay()->toDateString(),
             'abierto' => true,
+            'limite_creditos' => 18,
         ]);
 
         return Grupo::query()->create([

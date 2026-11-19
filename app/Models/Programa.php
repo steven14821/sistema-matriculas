@@ -21,4 +21,9 @@ class Programa extends Model
     {
         return $this->hasMany(Estudiante::class);
     }
+
+    public function solicitudesPrograma(): HasMany
+    {
+        return $this->hasMany(SolicitudPrograma::class);
+    }
 }

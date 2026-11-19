@@ -44,6 +44,7 @@ class AcademicManagementTest extends TestCase
             'fecha_inicio' => '2026-07-01',
             'fecha_fin' => '2026-12-15',
             'abierto' => '1',
+            'limite_creditos' => 18,
         ])->assertRedirect(route('staff.periodos.index'));
 
         $period = Periodo::query()->firstOrFail();
@@ -68,6 +69,10 @@ class AcademicManagementTest extends TestCase
             'profesor_id' => $profesor->id,
             'cupo' => 25,
         ]);
+        $this->assertDatabaseHas('periodos', [
+            'id' => $period->id,
+            'limite_creditos' => 18,
+        ]);
     }
 
     public function test_functionary_cannot_create_a_period_with_end_before_start(): void
@@ -81,6 +86,7 @@ class AcademicManagementTest extends TestCase
                 'fecha_inicio' => '2026-12-15',
                 'fecha_fin' => '2026-07-01',
                 'abierto' => '1',
+                'limite_creditos' => 18,
             ])
             ->assertRedirect(route('staff.periodos.create'))
             ->assertSessionHasErrors('fecha_fin');
@@ -192,6 +198,7 @@ class AcademicManagementTest extends TestCase
             'fecha_inicio' => '2028-07-10',
             'fecha_fin' => '2028-12-15',
             'abierto' => true,
+            'limite_creditos' => 18,
         ]);
         $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
 
@@ -268,6 +275,7 @@ class AcademicManagementTest extends TestCase
             'fecha_inicio' => '2026-07-01',
             'fecha_fin' => '2026-12-15',
             'abierto' => true,
+            'limite_creditos' => 18,
         ]);
 
         $periodoCerrado = Periodo::query()->create([
@@ -330,6 +338,7 @@ class AcademicManagementTest extends TestCase
             'fecha_inicio' => '2026-01-10',
             'fecha_fin' => '2026-06-15',
             'abierto' => true,
+            'limite_creditos' => 18,
         ]);
 
         $grupo = Grupo::query()->create([
@@ -386,6 +395,7 @@ class AcademicManagementTest extends TestCase
             'fecha_inicio' => '2027-01-10',
             'fecha_fin' => '2027-06-15',
             'abierto' => true,
+            'limite_creditos' => 18,
         ]);
 
         $grupo = Grupo::query()->create([
@@ -473,6 +483,7 @@ class AcademicManagementTest extends TestCase
             'fecha_inicio' => '2027-07-10',
             'fecha_fin' => '2027-12-15',
             'abierto' => true,
+            'limite_creditos' => 18,
         ]);
 
         $grupo = Grupo::query()->create([
@@ -534,6 +545,7 @@ class AcademicManagementTest extends TestCase
             'fecha_inicio' => '2028-01-10',
             'fecha_fin' => '2028-06-15',
             'abierto' => true,
+            'limite_creditos' => 18,
         ]);
         $grupo = Grupo::query()->create([
             'codigo' => 'A401',

@@ -57,7 +57,11 @@ class EnrollmentController extends Controller
         $today = today()->toDateString();
 
         return view('staff.enrollments.form', [
-            'estudiantes' => Estudiante::query()->with('usuario', 'programa')->orderBy('codigo')->get(),
+            'estudiantes' => Estudiante::query()
+                ->whereNotNull('programa_id')
+                ->with('usuario', 'programa')
+                ->orderBy('codigo')
+                ->get(),
             'grupos' => Grupo::query()
                 ->whereHas('periodo', function (Builder $query) use ($today): void {
                     $query->where('abierto', true)

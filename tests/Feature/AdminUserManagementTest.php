@@ -60,9 +60,33 @@ class AdminUserManagementTest extends TestCase
                 'role' => UserRole::Estudiante->value,
             ])
             ->assertRedirect(route('admin.users.create'))
-            ->assertSessionHasErrors(['codigo', 'documento', 'programa_id']);
+            ->assertSessionHasErrors(['codigo', 'documento']);
 
         $this->assertDatabaseMissing('users', ['email' => 'sin-perfil@matriculas.test']);
+    }
+
+    public function test_administrator_can_create_a_student_without_a_program(): void
+    {
+        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+
+        $this->actingAs($administrator)
+            ->post(route('admin.users.store'), [
+                'name' => 'Estudiante sin programa',
+                'email' => 'sin-programa@matriculas.test',
+                'password' => 'Segura1234!',
+                'password_confirmation' => 'Segura1234!',
+                'role' => UserRole::Estudiante->value,
+                'codigo' => 'EST-2026-102',
+                'documento' => '1000000102',
+                'programa_id' => '',
+            ])
+            ->assertRedirect(route('admin.users.index'));
+
+        $this->assertDatabaseHas('estudiantes', [
+            'codigo' => 'EST-2026-102',
+            'documento' => '1000000102',
+            'programa_id' => null,
+        ]);
     }
 
     public function test_non_administrator_cannot_manage_users(): void

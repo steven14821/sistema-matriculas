@@ -26,6 +26,12 @@
                 <input id="fecha_fin" name="fecha_fin" type="date" value="{{ old('fecha_fin', isset($periodo) ? $periodo->fecha_fin->toDateString() : '') }}" required class="block w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
                 @error('fecha_fin')<p class="mt-2 text-sm text-red-700">{{ $message }}</p>@enderror
             </div>
+            <div>
+                <label for="limite_creditos" class="mb-2 block text-sm font-medium text-slate-700">Máximo de créditos por estudiante</label>
+                <input id="limite_creditos" name="limite_creditos" type="number" min="1" max="65535" step="1" value="{{ old('limite_creditos', $periodo->limite_creditos ?? '') }}" required class="block w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
+                <p class="mt-2 text-xs leading-5 text-slate-500">La matrícula se bloqueará si el total de asignaturas del estudiante supera este límite.</p>
+                @error('limite_creditos')<p class="mt-2 text-sm text-red-700">{{ $message }}</p>@enderror
+            </div>
             <label class="flex items-center gap-3 text-sm font-medium text-slate-700">
                 <input type="hidden" name="abierto" value="0">
                 <input type="checkbox" name="abierto" value="1" @checked((bool) old('abierto', $periodo->abierto ?? false)) class="size-4 rounded border-slate-300 text-indigo-700 focus:ring-indigo-500">

@@ -39,7 +39,7 @@
                                 <span class="mt-1 block text-sm text-slate-500">{{ $estudiante->usuario->email }}</span>
                                 <span class="mt-1 block text-xs text-slate-500">Código {{ $estudiante->codigo }} · Documento {{ $estudiante->documento }}</span>
                             </td>
-                            <td class="px-5 py-4 text-sm text-slate-700">{{ $estudiante->programa->nombre }}</td>
+                            <td class="px-5 py-4 text-sm text-slate-700">{{ $estudiante->programa?->nombre ?? 'Sin programa asignado' }}</td>
                             <td class="px-5 py-4 text-sm text-slate-700">{{ $estudiante->matriculas_count }}</td>
                             <td class="px-5 py-4 text-right">
                                 <a href="{{ route('admin.estudiantes.show', $estudiante) }}" class="text-sm font-semibold text-indigo-700 hover:text-indigo-900">Ver ficha</a>

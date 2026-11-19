@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Grupo;
 use App\Models\Matricula;
 use App\Models\Periodo;
+use App\Models\Programa;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,19 +29,33 @@ class EnrollmentController extends Controller
 
         $offeredGroups = collect();
         $enrollments = collect();
+        $programas = collect();
+        $programRequest = null;
 
         if ($student !== null) {
-            $offeredGroups = Grupo::query()
-                ->whereIn('periodo_id', $openPeriods->modelKeys())
-                ->whereHas('asignatura', fn (Builder $query): Builder => $query->where('programa_id', $student->programa_id))
-                ->with(['asignatura', 'periodo', 'profesor'])
-                ->withCount([
-                    'matriculas as matriculas_activas_count' => fn (Builder $query): Builder => $query->where('estado', 'activa'),
-                ])
-                ->orderBy('periodo_id')
-                ->orderBy('asignatura_id')
-                ->orderBy('id')
-                ->get();
+            if ($student->programa_id !== null) {
+                $offeredGroups = Grupo::query()
+                    ->whereIn('periodo_id', $openPeriods->modelKeys())
+                    ->whereHas('asignatura', fn (Builder $query): Builder => $query->where('programa_id', $student->programa_id))
+                    ->with(['asignatura', 'periodo', 'profesor'])
+                    ->withCount([
+                        'matriculas as matriculas_activas_count' => fn (Builder $query): Builder => $query->where('estado', 'activa'),
+                    ])
+                    ->orderBy('periodo_id')
+                    ->orderBy('asignatura_id')
+                    ->orderBy('id')
+                    ->get();
+            } else {
+                $programRequest = $student->solicitudesPrograma()
+                    ->with('programa')
+                    ->orderByDesc('created_at')
+                    ->orderByDesc('id')
+                    ->first();
+
+                if ($programRequest?->estado !== 'pendiente') {
+                    $programas = Programa::query()->orderBy('nombre')->get();
+                }
+            }
 
             $enrollments = Matricula::query()
                 ->where('estudiante_id', $student->id)
@@ -50,6 +65,11 @@ class EnrollmentController extends Controller
                 ->orderByDesc('id')
                 ->get();
         }
+
+        $enrolledCreditsByPeriod = $enrollments
+            ->groupBy(fn (Matricula $enrollment): int => $enrollment->grupo->periodo_id)
+            ->map(fn ($periodEnrollments): int => $periodEnrollments
+                ->sum(fn (Matricula $enrollment): int => $enrollment->grupo->asignatura->creditos));
 
         $enrolledGroupIds = $enrollments->pluck('grupo_id')->all();
         $enrolledSubjectPeriodKeys = $enrollments
@@ -61,6 +81,9 @@ class EnrollmentController extends Controller
             'openPeriods' => $openPeriods,
             'offeredGroups' => $offeredGroups,
             'enrollments' => $enrollments,
+            'programas' => $programas,
+            'programRequest' => $programRequest,
+            'enrolledCreditsByPeriod' => $enrolledCreditsByPeriod,
             'enrolledGroupIds' => $enrolledGroupIds,
             'enrolledSubjectPeriodKeys' => $enrolledSubjectPeriodKeys,
         ]);
@@ -73,6 +96,12 @@ class EnrollmentController extends Controller
         if ($student === null) {
             return back()->withErrors([
                 'estudiante' => 'Tu usuario no tiene un perfil de estudiante asociado. Contacta a la administración.',
+            ]);
+        }
+
+        if ($student->programa_id === null) {
+            return back()->withErrors([
+                'estudiante' => 'Debes tener un programa aprobado antes de matricular asignaturas.',
             ]);
         }
 

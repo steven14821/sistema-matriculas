@@ -35,7 +35,21 @@ class EnrollStudentInGroup
                 ]);
             }
 
-            if (! $lockedGroup->asignatura()->where('programa_id', $lockedStudent->programa_id)->exists()) {
+            if ($lockedStudent->programa_id === null) {
+                throw ValidationException::withMessages([
+                    'grupo' => 'Debes tener un programa aprobado antes de matricular asignaturas.',
+                ]);
+            }
+
+            if ($period->limite_creditos === null) {
+                throw ValidationException::withMessages([
+                    'grupo' => 'Este periodo aún no tiene un límite de créditos configurado. Contacta al funcionario.',
+                ]);
+            }
+
+            $subject = $lockedGroup->asignatura()->first();
+
+            if ($subject === null || $subject->programa_id !== $lockedStudent->programa_id) {
                 throw ValidationException::withMessages([
                     'grupo' => 'El grupo no pertenece al programa académico asociado a tu perfil.',
                 ]);
@@ -68,6 +82,21 @@ class EnrollStudentInGroup
             if ($alreadyEnrolledInSubject) {
                 throw ValidationException::withMessages([
                     'grupo' => 'Ya tienes una matrícula activa en otro grupo de esta asignatura para el mismo periodo.',
+                ]);
+            }
+
+            $currentCredits = $lockedStudent->matriculas()
+                ->where('estado', 'activa')
+                ->whereHas('grupo', fn (Builder $query): Builder => $query->where('periodo_id', $period->id))
+                ->with('grupo.asignatura')
+                ->get()
+                ->sum(fn (Matricula $enrollment): int => $enrollment->grupo->asignatura->creditos);
+
+            if ($currentCredits + $subject->creditos > $period->limite_creditos) {
+                $remainingCredits = max(0, $period->limite_creditos - $currentCredits);
+
+                throw ValidationException::withMessages([
+                    'grupo' => "La asignatura excede el límite de {$period->limite_creditos} créditos del periodo. Te quedan {$remainingCredits} créditos disponibles.",
                 ]);
             }
 

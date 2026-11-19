@@ -44,9 +44,10 @@ class ProgramaController extends Controller
     public function destroy(Programa $programa): RedirectResponse
     {
         if ($programa->asignaturas()->withTrashed()->exists()
-            || $programa->estudiantes()->withTrashed()->exists()) {
+            || $programa->estudiantes()->withTrashed()->exists()
+            || $programa->solicitudesPrograma()->exists()) {
             return back()->withErrors([
-                'programa' => 'No se puede eliminar un programa con asignaturas o estudiantes asociados.',
+                'programa' => 'No se puede eliminar un programa con asignaturas, estudiantes o solicitudes asociadas.',
             ]);
         }
 

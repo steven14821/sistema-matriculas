@@ -41,8 +41,9 @@ class DatabaseSeederTest extends TestCase
             'nombre' => '2026-2',
             'abierto' => true,
         ]);
-        $this->assertDatabaseCount('asignaturas', 2);
-        $this->assertDatabaseCount('grupos', 2);
+        $this->assertDatabaseCount('asignaturas', 20);
+        $this->assertDatabaseCount('grupos', 42);
+        $this->assertDatabaseCount('profesores', 12);
         $this->assertDatabaseCount('matriculas', 2);
 
         $student = User::query()
@@ -60,11 +61,12 @@ class DatabaseSeederTest extends TestCase
         $seeder->run();
 
         $this->assertDatabaseCount('users', 3);
-        $this->assertDatabaseCount('programas', 1);
-        $this->assertDatabaseCount('asignaturas', 2);
+        $this->assertDatabaseCount('programas', 5);
+        $this->assertDatabaseCount('asignaturas', 20);
         $this->assertDatabaseCount('periodos', 1);
         $this->assertDatabaseCount('estudiantes', 1);
-        $this->assertDatabaseCount('grupos', 2);
+        $this->assertDatabaseCount('grupos', 42);
+        $this->assertDatabaseCount('profesores', 12);
         $this->assertDatabaseCount('matriculas', 2);
     }
 

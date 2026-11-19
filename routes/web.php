@@ -11,7 +11,9 @@ use App\Http\Controllers\Staff\GrupoController;
 use App\Http\Controllers\Staff\PeriodoController;
 use App\Http\Controllers\Staff\ProfesorController;
 use App\Http\Controllers\Staff\ProgramaController;
+use App\Http\Controllers\Staff\SolicitudProgramaController as StaffSolicitudProgramaController;
 use App\Http\Controllers\Student\EnrollmentController;
+use App\Http\Controllers\Student\SolicitudProgramaController as StudentSolicitudProgramaController;
 use App\Models\Asignatura;
 use App\Models\Grupo;
 use App\Models\Programa;
@@ -54,6 +56,7 @@ Route::middleware(['auth', 'can:self-enroll'])
     ->group(function (): void {
         Route::get('/student/enrollments', [EnrollmentController::class, 'index'])->name('student.enrollments.index');
         Route::post('/student/groups/{grupo}/enrollments', [EnrollmentController::class, 'store'])->name('student.enrollments.store');
+        Route::post('/student/solicitudes-programa', [StudentSolicitudProgramaController::class, 'store'])->name('student.solicitudes_programa.store');
         Route::get('/matriculas', [EnrollmentController::class, 'index'])->name('matriculas.mine');
         Route::post('/matriculas/grupos/{grupo}', [EnrollmentController::class, 'store'])->name('matriculas.inscribir');
         Route::delete('/matriculas/{matricula}', [EnrollmentController::class, 'destroy'])->name('matriculas.destroy');
@@ -81,6 +84,9 @@ Route::middleware(['auth', 'can:manage-academic'])
         Route::resource('profesores', ProfesorController::class)
             ->parameters(['profesores' => 'profesor'])
             ->except('show');
+        Route::get('/solicitudes-programa', [StaffSolicitudProgramaController::class, 'index'])->name('solicitudes_programa.index');
+        Route::get('/solicitudes-programa/{solicitudPrograma}/comprobante', [StaffSolicitudProgramaController::class, 'receipt'])->name('solicitudes_programa.comprobante');
+        Route::patch('/solicitudes-programa/{solicitudPrograma}', [StaffSolicitudProgramaController::class, 'update'])->name('solicitudes_programa.update');
     });
 
 Route::middleware(['auth', 'can:manage-enrollments'])

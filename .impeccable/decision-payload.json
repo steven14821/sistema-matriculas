@@ -1,0 +1,153 @@
+{
+  "title": "Elegir la dirección visual",
+  "question": "La portada debe explicar el sistema a personas nuevas. Elige un mundo visual, adopta el estandar de la categoria o pide otra ronda.",
+  "options": [
+    {
+      "id": "assigned",
+      "kind": "assigned",
+      "label": "Edicto de matrícula",
+      "kicker": "THE ROLL",
+      "lineage": "Volantes de salones de baile de la era zoot",
+      "thesis": "Una invitación académica impresa con la energía de un cartel irrepetible.",
+      "palette": ["#2b1725", "#e8b958", "#f5ebdc", "#71172f"],
+      "materials": ["papel crema", "tinta ciruela y ocre", "relieve tipográfico"],
+      "viewport": "Una sola hoja tipográfica: qué resuelve el sistema, cifras reales del catálogo y acceso visible al portal.",
+      "risk": "Puede parecer una fiesta si la oferta académica pierde protagonismo.",
+      "raised": [
+        {
+          "from": "dream-surreal-impossible-worlds-luminescent-alien-understory",
+          "raise": "Un único acento de tinta distingue la acción principal; el resto de la página conserva calma."
+        },
+        {
+          "from": "clouds-storms-auroras-iridescent-cloud-edge",
+          "raise": "El color separa estados y datos solo donde aclara la lectura, nunca como efecto ornamental."
+        },
+        {
+          "from": "signals-instruments-phosphor-terminal-midnight",
+          "raise": "La jerarquía tipográfica mantiene etiquetas, títulos y acciones distinguibles de un vistazo."
+        },
+        {
+          "from": "ikeda-datamatics",
+          "raise": "Las cifras verificables usan alineación y ritmo editorial precisos, sin convertir la portada en una visualización abstracta."
+        },
+        {
+          "from": "pop-culture-shelf-vertical-video-feed-surface",
+          "raise": "Una sola acción primaria se reconoce inmediatamente y no compite con llamadas secundarias."
+        }
+      ],
+      "html": ".impeccable/mocks/decision/assigned.html"
+    },
+    {
+      "id": "model-pick",
+      "kind": "pick",
+      "label": "Atlas de ingreso",
+      "kicker": "IMPECCABLE'S PICK",
+      "lineage": "Mapas de orientación y rutas urbanas",
+      "thesis": "Un mapa editorial convierte la matrícula en un recorrido entendible antes de entrar.",
+      "palette": ["#173b4d", "#e9c66d", "#f5f0e5", "#a44736"],
+      "materials": ["líneas de recorrido", "nodos impresos", "papel cartográfico"],
+      "viewport": "Un trayecto de tres hitos conecta oferta, grupos y matrícula con la acción de acceso y datos académicos actuales.",
+      "risk": "La metáfora de ruta se vuelve genérica si no se construye con los datos reales del catálogo.",
+      "html": ".impeccable/mocks/decision/model-pick.html"
+    },
+    {
+      "id": "challenger-alien-forest",
+      "kind": "challenger",
+      "catalogId": "dream-surreal-impossible-worlds-luminescent-alien-understory",
+      "label": "Herbario luminiscente",
+      "verdict": "declined",
+      "lineage": "Sotobosque alienígena al anochecer",
+      "thesis": "Una guía nocturna en la que el siguiente paso se ilumina entre raíces.",
+      "palette": ["#10151b", "#69e1d0", "#b4a1ed", "#bfe5a0"],
+      "materials": ["suelo oscuro", "luz de esporas", "venas luminosas"],
+      "viewport": "Una ruta de acceso emerge como luz entre el catálogo y el portal.",
+      "risk": "La ficción visual distrae de una tarea académica concreta.",
+      "case": "Pierde identificación y claridad: la ambientación imaginaria no explica una oferta universitaria real.",
+      "kept": "Un único punto focal conduce la mirada sin llenar la página de efectos.",
+      "html": ".impeccable/mocks/decision/challenger-alien-forest.html"
+    },
+    {
+      "id": "challenger-cloud-edge",
+      "kind": "challenger",
+      "catalogId": "clouds-storms-auroras-iridescent-cloud-edge",
+      "label": "Borde de luz",
+      "verdict": "declined",
+      "lineage": "Iridescencia en el borde de una nube",
+      "thesis": "Una franja cromática separa los estados de la oferta como luz en dispersión.",
+      "palette": ["#f8f8f4", "#56606a", "#8fd8be", "#dc9ab3", "#9d8bd4"],
+      "materials": ["papel blanco", "bandas espectrales", "tinta gris"],
+      "viewport": "La información aparece en bandas de color que cambian al recorrer programas y grupos.",
+      "risk": "Los colores cambiantes pueden parecer estado del sistema sin corresponder a datos reales.",
+      "case": "Pierde identificación y claridad: no hay evidencia de estados académicos que justifique un espectro dinámico.",
+      "kept": "El color queda reservado para distinguir información que sí tiene significado.",
+      "html": ".impeccable/mocks/decision/challenger-cloud-edge.html"
+    },
+    {
+      "id": "challenger-terminal",
+      "kind": "challenger",
+      "catalogId": "signals-instruments-phosphor-terminal-midnight",
+      "label": "Registro de terminal",
+      "verdict": "declined",
+      "lineage": "Terminal de fósforo verde en una sala de máquinas",
+      "thesis": "El catálogo se despliega como un registro continuo de comandos.",
+      "palette": ["#07120d", "#63ef93", "#2c9b57"],
+      "materials": ["vidrio oscuro", "fósforo verde", "trazos de barrido"],
+      "viewport": "Filas de programas y estados aparecen como una conversación con el sistema.",
+      "risk": "La interfaz técnica puede excluir a quienes solo quieren orientarse.",
+      "case": "Pierde identificación y claridad: el aspecto de terminal presenta la matrícula como herramienta técnica.",
+      "kept": "Títulos, etiquetas y estados mantienen una jerarquía nítida.",
+      "html": ".impeccable/mocks/decision/challenger-terminal.html"
+    },
+    {
+      "id": "challenger-data-sublime",
+      "kind": "challenger",
+      "catalogId": "ikeda-datamatics",
+      "label": "Campo de datos",
+      "verdict": "declined",
+      "lineage": "Instalación audiovisual de barras y frecuencias",
+      "thesis": "Un campo de líneas convierte cada grupo disponible en un pulso medible.",
+      "palette": ["#000000", "#ffffff"],
+      "materials": ["barras pixeladas", "líneas finas", "cifras monoespaciadas"],
+      "viewport": "Las cifras de la oferta forman una retícula que se invierte al seleccionar una fila.",
+      "risk": "El impacto abstracto desplaza el contenido legible que necesita una persona nueva.",
+      "case": "Pierde identificación y claridad: una visualización abstracta no orienta a los visitantes.",
+      "kept": "La microtipografía conserva precisión en cifras y detalles.",
+      "html": ".impeccable/mocks/decision/challenger-data-sublime.html"
+    },
+    {
+      "id": "challenger-video-feed",
+      "kind": "challenger",
+      "catalogId": "pop-culture-shelf-vertical-video-feed-surface",
+      "label": "Feed de pantalla completa",
+      "verdict": "declined",
+      "lineage": "Feed vertical de video de consumo",
+      "thesis": "Cada paso de la matrícula ocupa una pantalla completa.",
+      "palette": ["#090909", "#ffffff"],
+      "materials": ["imagen a sangre", "velo inferior", "controles de carril"],
+      "viewport": "Una secuencia vertical hace avanzar al visitante del catálogo a su matrícula.",
+      "risk": "El formato de entretenimiento fuerza una navegación lenta y oculta el contexto.",
+      "case": "Pierde identificación y claridad: el producto no cuenta con una secuencia de medios para sostener el formato.",
+      "kept": "La acción principal sigue siendo única, clara y visible.",
+      "html": ".impeccable/mocks/decision/challenger-video-feed.html"
+    }
+  ],
+  "reroll": {
+    "registers": ["safer", "bolder"]
+  },
+  "buildPath": {
+    "value": "code",
+    "toggle": false
+  },
+  "canon": true,
+  "canonCard": {
+    "kind": "canon",
+    "label": "La portada institucional estándar",
+    "thesis": "Una página académica familiar, clara y ejecutada con oficio.",
+    "palette": ["#ffffff", "#172554", "#2563eb", "#111827"],
+    "materials": ["retícula limpia", "tipografía sans", "bloques informativos"],
+    "viewport": "Encabezado institucional, resumen del sistema, acceso y bloques de oferta.",
+    "risk": "Se confunde con cualquier portal universitario por diseño.",
+    "html": ".impeccable/mocks/decision/canon.html"
+  },
+  "steer": true
+}

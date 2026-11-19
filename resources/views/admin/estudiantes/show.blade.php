@@ -20,7 +20,7 @@
         <dl class="mt-6 grid gap-4 border-t border-slate-100 pt-5 sm:grid-cols-3">
             <div><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Código</dt><dd class="mt-1 text-sm font-medium text-slate-900">{{ $estudiante->codigo }}</dd></div>
             <div><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Documento</dt><dd class="mt-1 text-sm font-medium text-slate-900">{{ $estudiante->documento }}</dd></div>
-            <div><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Carrera</dt><dd class="mt-1 text-sm font-medium text-slate-900">{{ $estudiante->programa->nombre }}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Carrera</dt><dd class="mt-1 text-sm font-medium text-slate-900">{{ $estudiante->programa?->nombre ?? 'Sin programa asignado' }}</dd></div>
         </dl>
     </div>
 
@@ -77,13 +77,13 @@
         <h2 id="career-subjects-heading" class="text-xl font-semibold text-slate-950">Asignaturas de su carrera</h2>
         <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <ul class="divide-y divide-slate-100">
-                @forelse ($estudiante->programa->asignaturas as $asignatura)
+                @forelse ($estudiante->programa?->asignaturas ?? [] as $asignatura)
                     <li class="flex flex-wrap justify-between gap-2 py-3 text-sm">
                         <span><span class="font-semibold text-slate-800">{{ $asignatura->codigo }}</span> · {{ $asignatura->nombre }}</span>
                         <span class="text-slate-500">{{ $asignatura->creditos }} créditos</span>
                     </li>
                 @empty
-                    <li class="py-3 text-sm text-slate-500">La carrera aún no tiene asignaturas registradas.</li>
+                    <li class="py-3 text-sm text-slate-500">{{ $estudiante->programa_id === null ? 'Este estudiante aún no tiene un programa asignado.' : 'La carrera aún no tiene asignaturas registradas.' }}</li>
                 @endforelse
             </ul>
         </div>
