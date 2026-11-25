@@ -35,7 +35,7 @@ class StudentEnrollmentTest extends TestCase
     #[DataProvider('usersWithoutSelfEnrollment')]
     public function test_user_without_student_role_cannot_open_enrollment_page(UserRole $role): void
     {
-        $user = User::factory()->create(['role' => $role]);
+        $user = User::factory()->withTwoFactorEnabled()->create(['role' => $role]);
 
         $this->actingAs($user)
             ->get(route('student.enrollments.index'))
@@ -249,7 +249,7 @@ class StudentEnrollmentTest extends TestCase
     public function test_student_without_an_academic_profile_cannot_submit_an_enrollment(): void
     {
         $this->freezeEnrollmentDate();
-        $user = User::factory()->create(['role' => UserRole::Estudiante]);
+        $user = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
         $program = $this->createProgram();
         $group = $this->createGroup(
             $this->createSubject($program, 'SIS101', 'Programación'),
@@ -361,7 +361,7 @@ class StudentEnrollmentTest extends TestCase
     private function createStudent(?Programa $program = null): array
     {
         $program ??= $this->createProgram();
-        $user = User::factory()->create(['role' => UserRole::Estudiante]);
+        $user = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
         $student = Estudiante::query()->create([
             'user_id' => $user->id,
             'codigo' => 'EST-'.$user->id,

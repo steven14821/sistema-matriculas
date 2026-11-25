@@ -20,9 +20,9 @@ class StaffEnrollmentTest extends TestCase
     public function test_functionary_can_register_a_student_and_search_enrollments(): void
     {
         $this->travelTo('2026-11-16 12:00:00');
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
         $program = $this->createProgram();
-        $studentUser = User::factory()->create([
+        $studentUser = User::factory()->withTwoFactorEnabled()->create([
             'name' => 'Estudiante de Consulta',
             'role' => UserRole::Estudiante,
         ]);
@@ -58,9 +58,9 @@ class StaffEnrollmentTest extends TestCase
     public function test_functionary_can_cancel_an_active_enrollment(): void
     {
         $this->travelTo('2026-11-16 12:00:00');
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
         $program = $this->createProgram();
-        $studentUser = User::factory()->create(['role' => UserRole::Estudiante]);
+        $studentUser = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
         $student = Estudiante::query()->create([
             'user_id' => $studentUser->id,
             'codigo' => 'EST-STAFF-2',
@@ -88,7 +88,7 @@ class StaffEnrollmentTest extends TestCase
 
     public function test_student_cannot_access_staff_enrollment_tools(): void
     {
-        $student = User::factory()->create(['role' => UserRole::Estudiante]);
+        $student = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
 
         $this->actingAs($student)
             ->get(route('staff.enrollments.index'))
@@ -97,7 +97,7 @@ class StaffEnrollmentTest extends TestCase
 
     public function test_administrator_cannot_manage_staff_enrollment_tools(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->actingAs($administrator)
             ->get(route('staff.enrollments.index'))

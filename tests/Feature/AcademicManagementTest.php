@@ -20,7 +20,7 @@ class AcademicManagementTest extends TestCase
 
     public function test_functionary_can_create_the_academic_catalog_and_associate_subjects_with_careers(): void
     {
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
         $this->travelTo('2026-11-16 12:00:00');
         $programResponse = $this->actingAs($functionary)
             ->post(route('staff.programas.store'), [
@@ -77,7 +77,7 @@ class AcademicManagementTest extends TestCase
 
     public function test_functionary_cannot_create_a_period_with_end_before_start(): void
     {
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->actingAs($functionary)
             ->from(route('staff.periodos.create'))
@@ -96,7 +96,7 @@ class AcademicManagementTest extends TestCase
 
     public function test_functionary_can_open_each_academic_management_page(): void
     {
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->withoutVite()
             ->actingAs($functionary)
@@ -123,7 +123,7 @@ class AcademicManagementTest extends TestCase
 
     public function test_functionary_cannot_delete_a_program_with_associated_subjects(): void
     {
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
         $program = Programa::query()->create([
             'nombre' => 'Ingeniería de Sistemas',
             'nivel' => 'Pregrado',
@@ -150,7 +150,7 @@ class AcademicManagementTest extends TestCase
 
     public function test_administrator_cannot_manage_the_academic_catalog(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->actingAs($administrator)
             ->get(route('staff.programas.index'))
@@ -167,7 +167,7 @@ class AcademicManagementTest extends TestCase
 
     public function test_admin_can_view_the_catalog_and_student_records(): void
     {
-        $admin = User::factory()->create([
+        $admin = User::factory()->withTwoFactorEnabled()->create([
             'role' => UserRole::Administrador,
         ]);
 
@@ -200,7 +200,7 @@ class AcademicManagementTest extends TestCase
             'abierto' => true,
             'limite_creditos' => 18,
         ]);
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->withoutVite()
             ->actingAs($functionary)
@@ -304,7 +304,7 @@ class AcademicManagementTest extends TestCase
             'cupo' => 20,
         ]);
 
-        $student = User::factory()->create([
+        $student = User::factory()->withTwoFactorEnabled()->create([
             'role' => UserRole::Estudiante,
         ]);
 
@@ -348,7 +348,7 @@ class AcademicManagementTest extends TestCase
             'cupo' => 1,
         ]);
 
-        $studentUser = User::factory()->create([
+        $studentUser = User::factory()->withTwoFactorEnabled()->create([
             'role' => UserRole::Estudiante,
         ]);
 
@@ -405,14 +405,14 @@ class AcademicManagementTest extends TestCase
             'cupo' => 1,
         ]);
 
-        $studentUser = User::factory()->create(['role' => UserRole::Estudiante]);
+        $studentUser = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
         $estudiante = Estudiante::query()->create([
             'user_id' => $studentUser->id,
             'codigo' => 'EST-2027-301',
             'documento' => '1000000301',
             'programa_id' => $programa->id,
         ]);
-        $funcionario = User::factory()->create(['role' => UserRole::Funcionario]);
+        $funcionario = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->withoutVite()
             ->actingAs($funcionario)
@@ -442,7 +442,7 @@ class AcademicManagementTest extends TestCase
             ->assertRedirect(route('staff.enrollments.create'))
             ->assertSessionHasErrors('grupo');
 
-        $anotherStudentUser = User::factory()->create(['role' => UserRole::Estudiante]);
+        $anotherStudentUser = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
         $anotherEstudiante = Estudiante::query()->create([
             'user_id' => $anotherStudentUser->id,
             'codigo' => 'EST-2027-302',
@@ -493,14 +493,14 @@ class AcademicManagementTest extends TestCase
             'cupo' => 1,
         ]);
 
-        $studentUser = User::factory()->create(['role' => UserRole::Estudiante]);
+        $studentUser = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
         $estudiante = Estudiante::query()->create([
             'user_id' => $studentUser->id,
             'codigo' => 'EST-2027-302',
             'documento' => '1000000302',
             'programa_id' => $programa->id,
         ]);
-        $funcionario = User::factory()->create(['role' => UserRole::Funcionario]);
+        $funcionario = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $matricula = Matricula::query()->create([
             'estudiante_id' => $estudiante->id,
@@ -553,7 +553,7 @@ class AcademicManagementTest extends TestCase
             'periodo_id' => $periodo->id,
             'cupo' => 20,
         ]);
-        $funcionario = User::factory()->create(['role' => UserRole::Funcionario]);
+        $funcionario = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->actingAs($funcionario)
             ->post(route('staff.profesores.store'), ['nombre' => 'María Salazar'])
@@ -581,7 +581,7 @@ class AcademicManagementTest extends TestCase
 
     public function test_student_cannot_manage_group_professors(): void
     {
-        $student = User::factory()->create(['role' => UserRole::Estudiante]);
+        $student = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
 
         $this->actingAs($student)
             ->get(route('staff.grupos.index'))

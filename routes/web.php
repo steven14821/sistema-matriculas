@@ -14,10 +14,13 @@ use App\Http\Controllers\Staff\ProgramaController;
 use App\Http\Controllers\Staff\SolicitudProgramaController as StaffSolicitudProgramaController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\SolicitudProgramaController as StudentSolicitudProgramaController;
+use App\Http\Middleware\RequireTwoFactorAuthentication;
 use App\Models\Asignatura;
 use App\Models\Grupo;
 use App\Models\Programa;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function (): View {
@@ -44,15 +47,28 @@ Route::get('/', function (): View {
     ]);
 })->name('home');
 
+Route::get('/two-factor/setup', function (Request $request): View|RedirectResponse {
+    $user = $request->user();
+
+    if ($user->hasEnabledTwoFactorAuthentication()
+        && $request->session()->get('status') !== 'two-factor-authentication-confirmed') {
+        return redirect()->route('dashboard');
+    }
+
+    return view('auth.two-factor-setup', ['user' => $user]);
+})
+    ->middleware(['auth', RequireTwoFactorAuthentication::class])
+    ->name('two-factor.setup');
+
 Route::get('/dashboard', DashboardController::class)
-    ->middleware('auth')
+    ->middleware(['auth', RequireTwoFactorAuthentication::class])
     ->name('dashboard');
 
 Route::get('/oferta', [OfertaAcademicaController::class, 'index'])
-    ->middleware('auth')
+    ->middleware(['auth', RequireTwoFactorAuthentication::class])
     ->name('oferta.index');
 
-Route::middleware(['auth', 'can:self-enroll'])
+Route::middleware(['auth', RequireTwoFactorAuthentication::class, 'can:self-enroll'])
     ->group(function (): void {
         Route::get('/student/enrollments', [EnrollmentController::class, 'index'])->name('student.enrollments.index');
         Route::post('/student/groups/{grupo}/enrollments', [EnrollmentController::class, 'store'])->name('student.enrollments.store');
@@ -62,7 +78,7 @@ Route::middleware(['auth', 'can:self-enroll'])
         Route::delete('/matriculas/{matricula}', [EnrollmentController::class, 'destroy'])->name('matriculas.destroy');
     });
 
-Route::middleware(['auth', 'can:manage-users'])
+Route::middleware(['auth', RequireTwoFactorAuthentication::class, 'can:manage-users'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function (): void {
@@ -73,7 +89,7 @@ Route::middleware(['auth', 'can:manage-users'])
         Route::get('/catalogo', [AcademicOverviewController::class, 'index'])->name('catalogo.index');
     });
 
-Route::middleware(['auth', 'can:manage-academic'])
+Route::middleware(['auth', RequireTwoFactorAuthentication::class, 'can:manage-academic'])
     ->prefix('staff')
     ->name('staff.')
     ->group(function (): void {
@@ -89,7 +105,7 @@ Route::middleware(['auth', 'can:manage-academic'])
         Route::patch('/solicitudes-programa/{solicitudPrograma}', [StaffSolicitudProgramaController::class, 'update'])->name('solicitudes_programa.update');
     });
 
-Route::middleware(['auth', 'can:manage-enrollments'])
+Route::middleware(['auth', RequireTwoFactorAuthentication::class, 'can:manage-enrollments'])
     ->prefix('staff')
     ->name('staff.')
     ->group(function (): void {

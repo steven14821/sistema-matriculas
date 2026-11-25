@@ -5,8 +5,10 @@ namespace Database\Factories;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use PragmaRX\Google2FA\Google2FA;
 
 /**
  * @extends Factory<User>
@@ -42,6 +44,15 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function withTwoFactorEnabled(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'two_factor_secret' => Crypt::encrypt(app(Google2FA::class)->generateSecretKey()),
+            'two_factor_recovery_codes' => Crypt::encrypt('[]'),
+            'two_factor_confirmed_at' => now(),
         ]);
     }
 }

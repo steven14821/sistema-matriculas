@@ -29,7 +29,7 @@
                     <section class="site-login__welcome" aria-labelledby="login-welcome-title">
                         <h1 id="login-welcome-title">Continúa tu<br><span>recorrido.</span></h1>
                         <p>
-                            Ingresa con tus credenciales institucionales para consultar la oferta y continuar con las opciones de tu perfil.
+                            Ingresa con tus credenciales institucionales. Después confirmarás el acceso con tu app Authenticator.
                         </p>
                         <div class="site-login__note">
                             <span class="site-login__note-rule" aria-hidden="true"></span>
@@ -82,16 +82,6 @@
                                     <p id="password-error" class="site-login__error" role="alert">{{ $message }}</p>
                                 @enderror
                             </div>
-
-                            <label for="remember" class="site-login__remember">
-                                <input
-                                    id="remember"
-                                    name="remember"
-                                    type="checkbox"
-                                    value="1"
-                                >
-                                <span>Recordarme en este dispositivo</span>
-                            </label>
 
                             <button type="submit" class="site-home__primary site-login__submit">
                                 <span>Ingresar</span>

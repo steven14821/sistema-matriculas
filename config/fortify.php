@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\RequireTwoFactorAuthentication;
+use Laravel\Fortify\Features;
+
 return [
 
     /*
@@ -99,7 +102,10 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => [
+        'web',
+        RequireTwoFactorAuthentication::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -159,6 +165,10 @@ return [
     |
     */
 
-    'features' => [],
+    'features' => [
+        Features::twoFactorAuthentication([
+            'confirm' => true,
+        ]),
+    ],
 
 ];

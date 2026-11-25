@@ -15,7 +15,7 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_can_create_a_user_with_a_role(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
         $program = Programa::query()->create([
             'nombre' => 'Ingeniería de Sistemas',
             'nivel' => 'Pregrado',
@@ -48,7 +48,7 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_cannot_create_a_student_without_academic_profile_data(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->actingAs($administrator)
             ->from(route('admin.users.create'))
@@ -67,7 +67,7 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_can_create_a_student_without_a_program(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->actingAs($administrator)
             ->post(route('admin.users.store'), [
@@ -91,7 +91,7 @@ class AdminUserManagementTest extends TestCase
 
     public function test_non_administrator_cannot_manage_users(): void
     {
-        $staffMember = User::factory()->create(['role' => UserRole::Funcionario]);
+        $staffMember = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->actingAs($staffMember)
             ->get(route('admin.users.index'))
@@ -100,7 +100,7 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_can_view_the_user_list_and_creation_form(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->withoutVite()
             ->actingAs($administrator)
@@ -119,7 +119,7 @@ class AdminUserManagementTest extends TestCase
 
     public function test_user_role_must_be_one_of_the_defined_roles(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->actingAs($administrator)
             ->from(route('admin.users.create'))
@@ -138,8 +138,8 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_can_assign_a_role_without_changing_other_user_data(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
-        $user = User::factory()->create([
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
+        $user = User::factory()->withTwoFactorEnabled()->create([
             'name' => 'Usuario existente',
             'role' => UserRole::Funcionario,
         ]);
@@ -160,8 +160,8 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_cannot_change_user_account_details(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
-        $user = User::factory()->create(['name' => 'Nombre original']);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
+        $user = User::factory()->withTwoFactorEnabled()->create(['name' => 'Nombre original']);
 
         $this->actingAs($administrator)
             ->put('/admin/users/'.$user->id, ['name' => 'Nombre cambiado'])
@@ -175,8 +175,8 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_cannot_assign_student_role_without_academic_profile(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
-        $user = User::factory()->create(['role' => UserRole::Funcionario]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
+        $user = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->actingAs($administrator)
             ->from(route('admin.users.index'))
@@ -196,8 +196,8 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_cannot_remove_their_own_administrator_role(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
-        User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
+        User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->actingAs($administrator)
             ->from(route('admin.users.index'))
@@ -215,7 +215,7 @@ class AdminUserManagementTest extends TestCase
 
     public function test_last_administrator_cannot_be_demoted(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->actingAs($administrator)
             ->from(route('admin.users.index'))
@@ -233,8 +233,8 @@ class AdminUserManagementTest extends TestCase
 
     public function test_administrator_cannot_delete_users(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
-        $user = User::factory()->create();
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
+        $user = User::factory()->withTwoFactorEnabled()->create();
 
         $this->actingAs($administrator)
             ->delete('/admin/users/'.$user->id)

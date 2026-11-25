@@ -31,7 +31,7 @@ class RoleDashboardTest extends TestCase
         string $view,
         string $heading,
     ): void {
-        $user = User::factory()->create(['role' => $role]);
+        $user = User::factory()->withTwoFactorEnabled()->create(['role' => $role]);
 
         $response = $this->withoutVite()
             ->actingAs($user)
@@ -49,7 +49,7 @@ class RoleDashboardTest extends TestCase
 
     public function test_functionary_dashboard_links_to_staff_academic_management(): void
     {
-        $staffMember = User::factory()->create(['role' => UserRole::Funcionario]);
+        $staffMember = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->withoutVite()
             ->actingAs($staffMember)
@@ -62,7 +62,7 @@ class RoleDashboardTest extends TestCase
 
     public function test_admin_dashboard_links_to_read_only_academic_views(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
 
         $this->withoutVite()
             ->actingAs($administrator)

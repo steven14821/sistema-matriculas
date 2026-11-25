@@ -120,7 +120,7 @@ class SolicitudProgramaTest extends TestCase
         ]);
         $this->createGroup($program, $period, 'SIS101', 'Fundamentos de Programación');
         $this->createGroup($otherProgram, $period, 'DER101', 'Introducción al Derecho');
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $response = $this->actingAs($functionary)
             ->patch(route('staff.solicitudes_programa.update', $application), [
@@ -153,7 +153,7 @@ class SolicitudProgramaTest extends TestCase
         ['user' => $studentUser, 'student' => $student] = $this->createStudent();
         $program = $this->createProgram('Ingeniería de Sistemas');
         $application = $this->createProgramRequest($student, $program);
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->actingAs($functionary)
             ->from(route('staff.solicitudes_programa.index'))
@@ -191,7 +191,7 @@ class SolicitudProgramaTest extends TestCase
         $program = $this->createProgram('Ingeniería de Sistemas');
         ['student' => $student] = $this->createStudent();
         $application = $this->createProgramRequest($student, $program);
-        $user = User::factory()->create(['role' => $role]);
+        $user = User::factory()->withTwoFactorEnabled()->create(['role' => $role]);
 
         $this->actingAs($user)
             ->get(route('staff.solicitudes_programa.comprobante', $application))
@@ -213,7 +213,7 @@ class SolicitudProgramaTest extends TestCase
         $program = $this->createProgram('Ingeniería de Sistemas');
         ['student' => $student] = $this->createStudent();
         $application = $this->createProgramRequest($student, $program);
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->actingAs($functionary)
             ->get(route('staff.solicitudes_programa.comprobante', $application))
@@ -226,7 +226,7 @@ class SolicitudProgramaTest extends TestCase
         $program = $this->createProgram('Ingeniería de Sistemas');
         ['student' => $student] = $this->createStudent();
         $this->createProgramRequest($student, $program);
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->actingAs($functionary)
             ->from(route('staff.programas.index'))
@@ -265,7 +265,7 @@ class SolicitudProgramaTest extends TestCase
      */
     private function createStudent(?Programa $program = null): array
     {
-        $user = User::factory()->create(['role' => UserRole::Estudiante]);
+        $user = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Estudiante]);
         $student = Estudiante::query()->create([
             'user_id' => $user->id,
             'codigo' => 'EST-'.$user->id,

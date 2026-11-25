@@ -19,7 +19,7 @@ class AdminStudentOverviewTest extends TestCase
 
     public function test_administrator_can_find_a_student_and_view_their_enrollment_history(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
         $program = Programa::query()->create([
             'nombre' => 'Ingeniería de Sistemas',
             'nivel' => 'Pregrado',
@@ -44,7 +44,7 @@ class AdminStudentOverviewTest extends TestCase
             'horario' => 'Lunes 08:00-10:00',
             'cupo' => 25,
         ]);
-        $studentUser = User::factory()->create([
+        $studentUser = User::factory()->withTwoFactorEnabled()->create([
             'name' => 'Estudiante Consultado',
             'role' => UserRole::Estudiante,
         ]);
@@ -79,7 +79,7 @@ class AdminStudentOverviewTest extends TestCase
 
     public function test_administrator_can_view_the_academic_catalog_without_write_controls(): void
     {
-        $administrator = User::factory()->create(['role' => UserRole::Administrador]);
+        $administrator = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Administrador]);
         $program = Programa::query()->create([
             'nombre' => 'Ingeniería Industrial',
             'nivel' => 'Pregrado',
@@ -118,7 +118,7 @@ class AdminStudentOverviewTest extends TestCase
 
     public function test_functionary_cannot_access_administrator_overviews(): void
     {
-        $functionary = User::factory()->create(['role' => UserRole::Funcionario]);
+        $functionary = User::factory()->withTwoFactorEnabled()->create(['role' => UserRole::Funcionario]);
 
         $this->actingAs($functionary)
             ->get(route('admin.estudiantes.index'))
